@@ -16,8 +16,9 @@ Written in Python, runs in the command line.
 
 #### Information Gathering ####
 1. Nmap (https://nmap.org/)
-2. CheckURL (https://github.com/UndeadSec/checkURL)
-3. Dirbuster (https://www.kali.org/tools/dirbuster/)
+2. Testssl.sh (https://testssl.sh/)
+3. CheckURL (https://github.com/UndeadSec/checkURL)
+4. Dirbuster (https://www.kali.org/tools/dirbuster/)
 
 #### Vulnerability Scanning ####
 1. Nikto (https://github.com/sullo/nikto)
@@ -32,7 +33,7 @@ Written in Python, runs in the command line.
 - Python (3.10.5) (https://www.python.org/downloads/)
 - Kali Linux (needs root privileges)
 
-CheckURL and DirBuster require being cloned into the current working directory of komodo.py.
+Testssl.sh, CheckURL, and DirBuster require being cloned into the current working directory of komodo.py.
 
 
 ### EXAMPLES ###
