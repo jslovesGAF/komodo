@@ -23,7 +23,7 @@ Vulnerability Scanning
 Technology Lookup
 1. Wappalyzer
 
-
+![KOMODO](https://i.imgur.com/xBv1L2j.png)
 ### REQUIREMENTS ###
 
 - Python (3.10.5) (https://www.python.org/downloads/)
@@ -33,6 +33,7 @@ Technology Lookup
 ### EXAMPLES ###
 
 Read EXAMPLES.txt
+
 
 
 ### CONTACT ###
