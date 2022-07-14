@@ -40,7 +40,6 @@ CheckURL and DirBuster require being cloned into the current working directory o
 Read EXAMPLES.txt
 
 
-
 ### CONTACT ###
 
 Official Email:   joshua.sloves@gaf.com
@@ -49,9 +48,6 @@ Official Email:   joshua.sloves@gaf.com
 
 ```
  Joshua Sloves - Application Security Analyst        
- Ethan Tomford - 2021 Cybersecurity Intern
+ Ethan Tomford - 2022 Cybersecurity Intern
 ```
 
-### CHANGE HISTORY ###
-
-Read CHANGELOG.txt
