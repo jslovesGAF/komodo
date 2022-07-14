@@ -11,17 +11,17 @@ Written in Python, runs in the command line.
 
 Tools Currently Supported:
 Information Gathering
-1. Nmap
-2. CheckURL
-3. Dirbuster
+1. Nmap (https://nmap.org/)
+2. CheckURL (https://github.com/UndeadSec/checkURL)
+3. Dirbuster (https://www.kali.org/tools/dirbuster/)
 
 Vulnerability Scanning
-1. Nikto
-2. WPScan
-3. DotDotPwn
+1. Nikto (https://github.com/sullo/nikto)
+2. WPScan (https://github.com/wpscanteam/wpscan)
+3. DotDotPwn (https://github.com/wireghoul/dotdotpwn)
 
 Technology Lookup
-1. Wappalyzer
+1. Wappalyzer (https://www.wappalyzer.com/)
 
 ![KOMODO](https://i.imgur.com/xBv1L2j.png)
 ### REQUIREMENTS ###
