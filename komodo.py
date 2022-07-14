@@ -254,7 +254,8 @@ try:
                 
 except:
     print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-    
+
+#Main
 def main():
 
     #Print KOMODO Title
