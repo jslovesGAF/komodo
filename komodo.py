@@ -81,6 +81,13 @@ try:
             os.system(cmd)
             print('Nmap Successfully Executed')
 
+        # Test TLS/SSL Encryption
+        def testssl(self):
+            os.chdir('testssl.sh')
+            cmd = str('./testssl.sh -s -p -h --vulnerabilities {}'.format(self.url))
+            os.system(cmd)
+            print('Testssl.sh Successfully Executed')
+
         # URL Reputation Checker
         def checkURL(self):
             os.chdir('checkURL')
@@ -105,8 +112,9 @@ try:
             print(colored('\n***Preparing INFORMATION GATHERING Scans***','cyan',
                           attrs=['bold','blink']))
             print('1. Nmap - Network Mapper')
-            print('2. CheckURL - URL Reputation Checker')
-            print('3. DirBuster - Brute Force Directories '+
+            print('2. Testssl.sh - Test TLS/SSL Encryption')
+            print('3. CheckURL - URL Reputation Checker')
+            print('4. DirBuster - Brute Force Directories '+
                   colored('(Warning: Likely Long Run Time)','red'))
             print('99. Go Back')
             
@@ -118,9 +126,13 @@ try:
 
             elif resp == '2':
                 url = INFORMATION_GATHERING() # call the class
+                url.testssl() #Start testssl.sh scan
+                
+            elif resp == '3':
+                url = INFORMATION_GATHERING() # call the class
                 url.checkURL() #Start CheckURL scan
 
-            elif resp == '3':
+            elif resp == '4':
                 url = INFORMATION_GATHERING() # call the class
                 url.dirbuster() #Start DirBuster scan
                 
