@@ -46,8 +46,8 @@ Official Email:   joshua.sloves@gaf.com
 ### AUTHORS ###
 
 ```
- Joshua Sloves - Application Security Analyst        Ethan Tomford - 2021 Cybersecurity Intern
-
+ Joshua Sloves - Application Security Analyst        
+ Ethan Tomford - 2021 Cybersecurity Intern
 ```
 
 ### CHANGE HISTORY ###
