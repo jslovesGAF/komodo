@@ -32,6 +32,8 @@ Written in Python, runs in the command line.
 - Python (3.10.5) (https://www.python.org/downloads/)
 - Kali Linux (needs root privileges)
 
+CheckURL and DirBuster require being cloned into the current working directory of komodo.py.
+
 
 ### EXAMPLES ###
 
