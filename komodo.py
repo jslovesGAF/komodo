@@ -3,6 +3,7 @@
 
 ####### SAMPLE TARGET https://google-gruyere.appspot.com/359771356088723951563265865954951743836/
 ####### SAMPLE TARGET scanme.nmap.org
+#######
 
 import os, warnings, sys
 from termcolor import colored
