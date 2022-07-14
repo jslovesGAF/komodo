@@ -1,4 +1,4 @@
-### DESCRIPTION ###
+## DESCRIPTION ##
 
 KOMODO - The One-Stop-Shop for aiding Standard's Application Security Team
 
@@ -10,17 +10,18 @@ such as information gathering, vulnerability scanning, and technology lookups.
 Written in Python, runs in the command line. 
 
 Tools Currently Supported:
-Information Gathering
+
+### Information Gathering ###
 1. Nmap (https://nmap.org/)
 2. CheckURL (https://github.com/UndeadSec/checkURL)
 3. Dirbuster (https://www.kali.org/tools/dirbuster/)
 
-Vulnerability Scanning
+### Vulnerability Scanning ###
 1. Nikto (https://github.com/sullo/nikto)
 2. WPScan (https://github.com/wpscanteam/wpscan)
 3. DotDotPwn (https://github.com/wireghoul/dotdotpwn)
 
-Technology Lookup
+### Technology Lookup ###
 1. Wappalyzer (https://www.wappalyzer.com/)
 
 ![KOMODO](https://i.imgur.com/xBv1L2j.png)
