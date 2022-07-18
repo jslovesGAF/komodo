@@ -28,8 +28,6 @@ try:
 
             wappalyzer = Wappalyzer.latest()
             print(wappalyzer.analyze_with_versions_and_categories(webpage))
-            print('Wappalyzer Successfully Executed')
-
       
     class VULNERABILITY:
         def __init__(self):
@@ -37,20 +35,24 @@ try:
 
         # Open Source Vulnerability Scanner
         def nikto(self):
+            global url
+            url = self.url
             print('Lauching Nikto Vulnerability Scanner on {}'.format(self.url))
             cmd = str('nikto -h {} -ssl -o nikto.html -Format htm'.format(self.url))
             os.system(cmd)
-            print('Nikto Successfully Executed')
 
         # Wordpress WebApp Vulnerability Scanner
         def WPScan(self):
+            global url
+            url = self.url
             print('Running WPScan Against {}'.format(self.url))
             cmd = str('wpscan --url '+self.url)
             os.system(cmd)
-            print('WPScan Successfully Executed')
 
         # Directory Traversal Exploiter
         def dotdotpwn(self):
+            global url
+            url = self.url
             orig = str(self.url)
             
             if 'https://' in orig:
@@ -61,7 +63,6 @@ try:
             print('Running DotDotPwn Against {}'.format(new))
             cmd = str('dotdotpwn -m http -h {}'.format(new))
             os.system(cmd)
-            print('DotDotPwn Successfully Executed')
 
     class INFORMATION_GATHERING:
         def __init__(self):
@@ -69,6 +70,9 @@ try:
 
         # Network Mapper
         def nmap(self):
+            global url
+            url = self.url
+    
             print("Launching aggressive NMAP Scan\n")
             orig = str(self.url)
 
@@ -79,28 +83,35 @@ try:
 
             cmd = str('nmap -p0- -v -A -sV -T4 {}'.format(new))
             os.system(cmd)
-            print('Nmap Successfully Executed')
 
         # Test TLS/SSL Encryption
         def testssl(self):
+            global url
+            url = self.url
+            
             os.chdir('testssl.sh')
             cmd = str('./testssl.sh -s -p -h --vulnerabilities {}'.format(self.url))
             os.system(cmd)
-            print('Testssl.sh Successfully Executed')
+            os.chdir('..')
 
         # URL Reputation Checker
         def checkURL(self):
+            global url
+            url = self.url
+            
             os.chdir('checkURL')
             cmd = str('python checkURL.py --url {}'.format(self.url))
             os.system(cmd)
-            print('CheckURL Successfully Executed')
+            os.chdir('..')
             
         # Brute force directories and file names on web application servers
         def dirbuster(self):
+            global url
+            url = self.url
+            
             os.chdir('python-dirbuster')
             cmd = str('python dirbust.py '+self.url+'/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt')
             os.system(cmd)
-            print('DirBuster Successfully Executed')
         
     def landing(prompt,url_temp):
         global url
@@ -116,28 +127,38 @@ try:
             print('3. CheckURL - URL Reputation Checker')
             print('4. DirBuster - Brute Force Directories '+
                   colored('(Warning: Likely Long Run Time)','red'))
-            print('99. Go Back')
+            print('Q. Go Back')
+
+            print(colored("\n-- syntax: 1245 --", "yellow"))
+            options = input('Choose an option to proceed: \n')
             
-            resp = input('\nChoose an option to proceed: \n')
+            for resp in options:
+                if resp == '1':
+                    url = INFORMATION_GATHERING() # call the class
+                    url.nmap() #Start nmap scan
+                    print('Nmap Successfully Executed')
 
-            if resp == '1':
-                url = INFORMATION_GATHERING() # call the class
-                url.nmap() #Start nmap scan
+                elif resp == '2':
+                    url = INFORMATION_GATHERING() # call the class
+                    url.testssl() #Start testssl.sh scan
+                    print('Testssl.sh Successfully Executed')
 
-            elif resp == '2':
-                url = INFORMATION_GATHERING() # call the class
-                url.testssl() #Start testssl.sh scan
-                
-            elif resp == '3':
-                url = INFORMATION_GATHERING() # call the class
-                url.checkURL() #Start CheckURL scan
+                elif resp == '3':
+                    url = INFORMATION_GATHERING() # call the class
+                    url.checkURL() #Start CheckURL scan
+                    print('CheckURL Successfully Executed')
 
-            elif resp == '4':
-                url = INFORMATION_GATHERING() # call the class
-                url.dirbuster() #Start DirBuster scan
-                
-            elif resp == '99':
-                initial(validURL,url)
+                elif resp == '4':
+                    url = INFORMATION_GATHERING() # call the class
+                    url.dirbuster() #Start DirBuster scan
+                    print('DirBuster Successfully Executed')
+   
+                elif resp == 'q'or 'Q':
+                    initial(validURL,url)
+                    
+                else:
+                    print(colored('\nInvalid input. Please try again!\n','red',
+                        attrs=['bold']))
 
         elif prompt == '2':
             print('\nCurrent Target: '+url)
@@ -146,25 +167,34 @@ try:
             print('1. Nikto - Open Source Vulnerability Scanner')
             print('2. WPScan - Wordpress WebApp Vulnerability Scanner')
             print('3. DotDotPwn - Directory Traversal Exploiter')
+            print('Q. Go Back')
 
-            print('99. Go Back')
-
-            resp = input('\nChoose an option to proceed: \n')
-
-            if resp == '1':
-                url = VULNERABILITY() # call the class
-                url.nikto() #Start Nikto Scan
+            print(colored("\n-- syntax: 1245 --", "yellow"))
+            options = input('Choose an option to proceed: \n')
             
-            if resp == '2':
-                url = VULNERABILITY() # call the class
-                url.WPScan() #Start WPScan Scan
+            for resp in options:
+            
+                if resp == '1':
+                    url = VULNERABILITY() # call the class
+                    url.nikto() #Start Nikto Scan
+                    print('Nikto Successfully Executed')
 
-            if resp == '3':
-                url = VULNERABILITY() # call the class
-                url.dotdotpwn() #Start DotDotPwn Scan
+                elif resp == '2':
+                    url = VULNERABILITY() # call the class
+                    url.WPScan() #Start WPScan Scan
+                    print('WPScan Successfully Executed')
+
+                elif resp == '3':
+                    url = VULNERABILITY() # call the class
+                    url.dotdotpwn() #Start DotDotPwn Scan
+                    print('DotDotPwn Successfully Executed')
                 
-            elif resp == '99':
-                initial(validURL,url)
+                elif resp == 'q' or 'Q':
+                    initial(validURL,url)
+        
+                else:
+                    print(colored('\nInvalid input. Please try again!\n','red',
+                        attrs=['bold']))
 
         elif prompt == '3':
             print('\nCurrent Target: '+url)
@@ -172,20 +202,27 @@ try:
                           attrs=['bold','blink']))
             print('1. Wappalyzer - Underlying Technology Lookup')
             print('2. TBD')
-            print('99. Go Back')
+            print('Q. Go Back')
 
-            resp = input('\nChoose an option to proceed: \n')
+            print(colored("\n-- syntax: 1245 --", "yellow"))
+            options = input('Choose an option to proceed: \n')
+            
+            for resp in options:
+                if resp == '1':
+                    url = TECHNOLOGY_LOOKUP() # call the class
+                    url.wappalyzer()
+                    print('Wappalyzer Successfully Executed')
 
-            if resp == '1':
-                url = TECHNOLOGY_LOOKUP() # call the class
-                url.wappalyzer()
-                
-            if resp == '2':
-                url = TECHNOLOGY_LOOKUP() # call the class
-                url.builtwith()
+                if resp == '2':
+                    url = TECHNOLOGY_LOOKUP() # call the class
+                    url.builtwith()
 
-            elif resp == '99':
-                initial(validURL,url)
+                elif resp == 'q' or 'Q':
+                    initial(validURL,url)
+                    
+                else:
+                    print(colored('\nInvalid input. Please try again!\n','red',
+                        attrs=['bold']))
                 
 ############################## WORK IN PROGRESS ############################
 ##        elif prompt == '4':
@@ -249,7 +286,8 @@ try:
                 url = 'https://'+str(target)
                 validURL = True
                 print ("URL SUCCESSFULLY VALIDATED") #for debugging
-                print('\nCurrent Target: '+url)
+                print(colored('\nCurrent Target: '+url,
+                        attrs=['bold']))
 
                 initial(validURL,url)
 
@@ -258,7 +296,8 @@ try:
                 url = 'http://'+str(target)
                 validURL = True
                 print ("URL SUCCESSFULLY VALIDATED") #for debugging
-                print('\nCurrent Target: '+url)
+                print(colored('\nCurrent Target: '+url,
+                        attrs=['bold']))
 
                 initial(validURL,url)
                 
