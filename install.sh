@@ -3,7 +3,7 @@
 echo "------ Running all neccesssary installations for KOMODO ------"
 
 #Wappalzyer 
-python3 -m install python-Wappalyzer
+python3 -m pip install python-Wappalyzer
 
 #Art - for tprint
 pip install art==5.7
