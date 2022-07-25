@@ -28,6 +28,7 @@ try:
 
             wappalyzer = Wappalyzer.latest()
             print(wappalyzer.analyze_with_versions_and_categories(webpage))
+            
       
     class VULNERABILITY:
         def __init__(self):
@@ -46,7 +47,7 @@ try:
             global url
             url = self.url
             print('Running WPScan Against {}'.format(self.url))
-            cmd = str('wpscan --url '+self.url)
+            cmd = str('wpscan --url '+self.url+' --no-update --no-banner')
             os.system(cmd)
 
         # Directory Traversal Exploiter
@@ -112,7 +113,7 @@ try:
             os.chdir('python-dirbuster')
             cmd = str('python dirbust.py '+self.url+'/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt')
             os.system(cmd)
-        
+      
     def landing(prompt,url_temp):
         global url
         validURL = True
@@ -215,16 +216,9 @@ try:
                 for resp in options:
                     if resp == '1':
                         url = TECHNOLOGY_LOOKUP() # call the class
-                        url.wappalyzer()
+                        url.wappalyzer() #Start Nikto Scan
                         print('Wappalyzer Successfully Executed')
 
-                    if resp == '2':
-                        url = TECHNOLOGY_LOOKUP() # call the class
-                        url.builtwith()
-
-                    elif resp == '99':
-                        initial(validURL,url)
-                        
                     else:
                         print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
                             attrs=['bold']))
