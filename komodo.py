@@ -9,19 +9,44 @@ import os, warnings, sys
 from termcolor import colored
 from art import *
 from Wappalyzer import Wappalyzer, WebPage
+import socket
 
 try:
-    class TBD:
+    class EXPLOITS:
         def __init__(self):
             self.url = url
 
+        def MSWmap(self):
+            global url
+            url = self.url
+            orig = str(self.url)
+            print('Lauching WMAP Scanner through Metasploit on {}'.format(self.url))
+            
+            if 'https://' in orig:
+                new = orig.replace('https://',"",1)
+                ip = socket.gethostbyname(new)
+                cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/.msf4/fav_modules;exit'+"'")
+                print(cmd)
+                os.system(cmd)
+
+            elif 'http://' in orig:
+                new = orig.replace('http://',"",1)
+                ip = socket.gethostbyname(new)
+                cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/.msf4/fav_modules;exit'+"'")
+                print(cmd)
+                os.system(cmd)
+
+            else:
+                ip = socket.gethostbyname(new)
+                cmd = str('msfconsole -q -p wmap -x '+'wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/.msf4/fav_modules')
+                os.system(cmd)
+                          
     class TECHNOLOGY_LOOKUP:
         def __init__(self):
             self.url = url
 
         # Discover WebApp underlying technology
         def wappalyzer(self):
-            print(str(self.url))
             print('Running Wappalyzer technology detector on {}'.format(self.url))
             webpage = WebPage.new_from_url(str(self.url))
             warnings.filterwarnings('ignore', message="""Caught 'unbalanced parenthesis at position 119' compiling regex""", category=UserWarning )
@@ -29,6 +54,14 @@ try:
             wappalyzer = Wappalyzer.latest()
             print(wappalyzer.analyze_with_versions_and_categories(webpage))
             
+        def cmseek(self):
+            global url
+            url = self.url
+            print('Lauching CMSeeK Detection on {}'.format(self.url))
+            os.chdir('CMSeeK')
+            cmd = str('python cmseek.py -u {}'.format(self.url))
+            os.system(cmd)
+            os.chdir('..')    
       
     class VULNERABILITY:
         def __init__(self):
@@ -203,7 +236,7 @@ try:
             print(colored('\n***Preparing TECHNOLOGY LOOKUP Scans***\n','green',
                           attrs=['bold','blink']))
             print('1. Wappalyzer - Underlying Technology Lookup')
-            print('2. TBD')
+            print('2. CMSeeK - Basic CMS Detection')
             print('99. Go Back')
 
             print(colored("\n-- syntax: 1245 --", "yellow"))
@@ -219,35 +252,44 @@ try:
                         url.wappalyzer() #Start Nikto Scan
                         print('Wappalyzer Successfully Executed')
 
+                    if resp == '2':
+                        url = TECHNOLOGY_LOOKUP() # call the class
+                        url.cmseek() #Start Nikto Scan
+                        print('CMSeeK Successfully Executed')
+                        
                     else:
                         print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
                             attrs=['bold']))
-                
-############################## WORK IN PROGRESS ############################
-##        elif prompt == '4':
-##            print('\nCurrent Target: '+url)
-##            print(colored('\n***Preparing TBD Scans***\n','magenta',
-##                          attrs=['bold','blink']))
-##            print('1. TBD')
-##            print('2. TBD')
-##            print('99. Go Back')
-##
-##            resp = input('\nChoose an option to proceed: \n')
-##
-##            if resp == '1':
-##                url = TECHNOLOGY_LOOKUP() # call the class
-##                url.wappalyzer()
-##                
-##            if resp == '2':
-##                url = TECHNOLOGY_LOOKUP() # call the class
-##                url.builtwith()
-############################## WORK IN PROGRESS ############################
+
+        elif prompt == '4':
+            print('\nCurrent Target: '+url)
+            print(colored('\n***Preparing EXPLOIT Scans***\n','magenta,
+                          attrs=['bold','blink']))
+            print('1. Metasploit: WMAP - Web App Vuln. Scanner Conducted Within Metasploit framework')
+            print('99. Go Back')
+
+            print(colored("\n-- syntax: 1245 --", "yellow"))
+            options = input('Choose an option to proceed: \n')
+            
+            if options == '99':
+                initial(validURL,url)
+
+            else:
+                for resp in options:
+                    if resp == '1':
+                        url = EXPLOITS() # call the class
+                        url.MSWmap() #Start Nikto Scan
+                        print('Metasploit: WMAP Successfully Executed')
+                        
+                    else:
+                        print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
+                            attrs=['bold']))
 
         elif prompt == '0':
             validURL = False
             validateURL(validURL,url) 
 
-        elif prompt == 'Q' or 'q':
+        elif prompt == '99':
             sys.exit(colored('\nTerminating KOMODO (╯°□°）╯︵ ┻━┻','red', attrs=['bold']))
                    
         else:
@@ -265,10 +307,10 @@ try:
                           attrs=['bold']))
             print(colored('3. Technology Lookup','green',
                           attrs=['bold']))
-            print(colored('4. TBD','magenta',
+            print(colored('4. Exploits','magenta',
                           attrs=['bold']))
             print(colored('0. Change Target', 'red', attrs=['bold']))
-            print(colored('Q. Exit', 'red', attrs=['bold']))
+            print(colored('99. Exit', 'red', attrs=['bold']))
 
             prompt = input('\nChoose a category to proceed: ')               
             landing(prompt,url)
