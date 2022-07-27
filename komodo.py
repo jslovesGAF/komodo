@@ -263,7 +263,7 @@ try:
 
         elif prompt == '4':
             print('\nCurrent Target: '+url)
-            print(colored('\n***Preparing EXPLOIT Scans***\n','magenta,
+            print(colored('\n***Preparing EXPLOIT Scans***\n','magenta',
                           attrs=['bold','blink']))
             print('1. Metasploit: WMAP - Web App Vuln. Scanner Conducted Within Metasploit framework')
             print('99. Go Back')
