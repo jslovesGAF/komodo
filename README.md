@@ -9,7 +9,7 @@ such as information gathering, vulnerability scanning, and technology lookups.
 
 Written in Python, runs in the command line. 
 
-![KOMODO](https://imgur.com/a/kDmBq4U)
+![KOMODO](https://i.imgur.com/uJAB5mn.png)
 
 
 ### Tools Currently Supported: ###
