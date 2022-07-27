@@ -27,13 +27,17 @@ Written in Python, runs in the command line.
 
 #### Technology Lookup ####
 1. Wappalyzer (https://www.wappalyzer.com/)
+2. CMSeek (https://github.com/Tuhinshubhra/CMSeeK)
+
+#### Exploits ####
+1. Metasploit - WMAP (https://www.offensive-security.com/metasploit-unleashed/wmap-web-scanner/)
 
 ### REQUIREMENTS ###
 
 - Python (3.10.5) (https://www.python.org/downloads/)
 - Kali Linux (needs root privileges)
 
-Testssl.sh, CheckURL, and DirBuster require being cloned into the current working directory of komodo.py.
+Run install.sh to install necessary dependencies.
 
 
 ### EXAMPLES ###
