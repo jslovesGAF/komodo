@@ -25,7 +25,6 @@ class EXPLOITS:
 
         try:
             print('Lauching WMAP Scanner through Metasploit on {}'.format(self.url))
-            os.chdir('html')
             #regular expression to replace all link issues i.e. / & .
             rep = {"https://": "", "http://": ""} #define desired replacements here
 
@@ -35,9 +34,8 @@ class EXPLOITS:
             new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], orig))
             ip = socket.gethostbyname(new)
             
-            cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/.msf4/fav_modules;exit'+"'"+" | txt2html -extract -8 >> {file}".format(file=output))
+            cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/komodo/fav_modules;exit'+"'"+"| tee /dev/stderr | txt2html -extract -8 >> html/{file}".format(file=output))
             os.system(cmd)
-            os.chdir('..')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
                       
@@ -49,24 +47,27 @@ class TECHNOLOGY_LOOKUP:
     # Discover WebApp underlying technology
     def wappalyzer(self):
         global output
+        global url
+        url = self.url
         output = self.output
 
         try:   
             os.chdir('html')
             with open(output, "a") as f:
-                webpage = WebPage.new_from_url(str(self.url))
+                webpage = WebPage.new_from_url(url)
                 warnings.filterwarnings('ignore', message="""Caught 'unbalanced parenthesis at position 119' compiling regex""", category=UserWarning )
 
                 wappalyzer = Wappalyzer.latest()
                 print(wappalyzer.analyze_with_versions_and_categories(webpage))
 
                 f.write(str(wappalyzer.analyze_with_versions_and_categories(webpage)))
-                print('Running Wappalyzer technology detector on {}'.format(self.url))
+                print('Running Wappalyzer technology detector on {}'.format(url))
                 f.close()
             os.chdir('..')
             print('Wappalyzer Successfully Executed')
 
         except:
+            os.chdir('..')
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
         
     def cmseek(self):
@@ -78,43 +79,45 @@ class TECHNOLOGY_LOOKUP:
         try:
             print('Lauching CMSeeK Detection on {}'.format(self.url))
             os.chdir('CMSeeK')
-            cmd = str('python cmseek.py -u {url} | txt2html -extract -8 >> ../html/{file} '.format(url=self.url,file=self.output))
+            cmd = str('python cmseek.py -u {url} | tee /dev/stderr | txt2html -extract -8 >> ../html/{file} '.format(url=self.url,file=self.output))
             os.system(cmd)
             os.chdir('..')
             print('CMSeeK Successfully Executed')
         except:
+            os.chdir('..')
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
   
 class VULNERABILITY:
     def __init__(self):
         self.url = url
+        self.output = output
 
     # Open Source Vulnerability Scanner
     def nikto(self):
         global url
+        global output
         url = self.url
-        
+        output = self.output
+
         try:
-            os.chdir('html')
             print('Lauching Nikto Vulnerability Scanner on {}'.format(self.url))
-            cmd = str('nikto -h {url} | txt2html -extract -8 >> {file} '.format(url=self.url,file=self.output))
+            cmd = str('nikto -h {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file} '.format(url=self.url,file=self.output))
             os.system(cmd)
             print('Nikto Successfully Executed')
-            os.chdir('..')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
             
     # Wordpress WebApp Vulnerability Scanner
     def WPScan(self):
         global url
+        global output
         url = self.url
+        output = self.output
         
         try:
-            os.chdir('html')            
             print('Running WPScan Against {}'.format(self.url))
-            cmd = str('wpscan --url {url} --no-update --no-banner | txt2html -extract -8 >> {file}'.format(url=self.url,file=self.output))
+            cmd = str('wpscan --url {url} --no-update --no-banner | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url,file=self.output))
             os.system(cmd)
-            os.chdir('..')
             print('WPScan Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -122,20 +125,21 @@ class VULNERABILITY:
     # Directory Traversal Exploiter
     def dotdotpwn(self):
         global url
+        global output
         url = self.url
+        output = self.output
+        
         orig = str(self.url)
         
         try:
-            os.chdir('html')
             if 'https://' in orig:
                 new = orig.replace('https://',"",1)
             elif 'http://' in orig:
                 new = orig.replace('http://',"",1)
                 
             print('Running DotDotPwn Against {}'.format(new))
-            cmd = str('dotdotpwn -m http -h {url} | txt2html -extract -8 >> {file}'.format(url=new, file=output))
+            cmd = str('dotdotpwn -m http -h {url}| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
             os.system(cmd)
-            os.chdir('..')
             print('DotDotPwn Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -143,14 +147,16 @@ class VULNERABILITY:
 class INFORMATION_GATHERING:
     def __init__(self):
         self.url = url
+        self.output = output
 
     # Network Mapper
     def nmap(self):
         global url
+        global output
         url = self.url
+        output = self.output
 
         try:
-            os.chdir('html')
             print("Launching aggressive NMAP Scan\n")
             orig = str(self.url)
 
@@ -159,9 +165,8 @@ class INFORMATION_GATHERING:
             elif 'http://' in orig:
                 new = orig.replace('http://',"",1)
 
-            cmd = str('nmap -v -A -T5 {url} --stats-every 30m | txt2html -extract -8 >> {file}'.format(url=new, file=output))
+            cmd = str('nmap -v -A -T5 {url} --stats-every 30m| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
             os.system(cmd)
-            os.chdir('..')
             print('Nmap Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -169,37 +174,45 @@ class INFORMATION_GATHERING:
     # Test TLS/SSL Encryption
     def testssl(self):
         global url
+        global output
         url = self.url
+        output = self.output
         
         try:
             print("Launching TestSSL Scan\n")
             os.chdir('testssl.sh')
-            cmd = str('./testssl.sh -s -p -h --vulnerabilities {url} | txt2html -extract -8 >> ../html/{file}'.format(url=self.url, file=output))
+            cmd = str('./testssl.sh -s -p -h --vulnerabilities {url} | tee /dev/stderr | txt2html -extract -8 >> ../html/{file}'.format(url=self.url, file=output))
             os.system(cmd)
             os.chdir('..')
             print('TestSSL Successfully Executed')
         except:
+            os.chdir('..')
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
     # URL Reputation Checker
     def checkURL(self):
         global url
+        global output
         url = self.url
+        output = self.output
         
         try:
             print("Launching CheckURL Scan\n")
             os.chdir('checkURL')
-            cmd = str('python checkURL.py --url {url} | txt2html -extract -8 >> ../html/{file}'.format(url=self.url, file=output))
+            cmd = str('python checkURL.py --url {url}| tee /dev/stderr | txt2html -extract -8 >> ../html/{file}'.format(url=self.url, file=output))
             os.system(cmd)
             os.chdir('..')
             print('CheckURL Successfully Executed')
         except:
+            os.chdir('..')
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
         
     # Brute force directories and file names on web application servers
     def dirbuster(self):
         global url
+        global output
         url = self.url
+        output = self.output
         
         try:
             print("DirBuster Scan Not Currently Functional!\n")
@@ -208,12 +221,12 @@ class INFORMATION_GATHERING:
 ##            os.system(cmd)
 ##            os.chdir('..')
         except:
+            os.chdir('/kali/home/komodo')
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-
 
 def header(tool):
     seperator = str("<p>" + ("-"*40) + "<br>" + "</p>")
-    current_time = "<p><i>" + str(datetime.datetime.now()) + "</i></p>"
+    current_time = "<p>Ran on: <i>"+ str(datetime.datetime.now()) + "</i></p>"
     os.chdir('html')
     #open the output file & append to it
     with open(output, "a") as f:
@@ -309,7 +322,7 @@ def landing(prompt,url_temp,output_temp):
                       attrs=['bold','blink']))
         print('1. Nikto - Open Source Vulnerability Scanner')
         print('2. WPScan - Wordpress WebApp Vulnerability Scanner')
-        print('3. DotDotPwn - Directory Traversal Exploiter'+
+        print('3. DotDotPwn - Directory Traversal Exploiter '+
               colored('(Warning: Likely Long Run Time)','red'))
         print(colored('99.','red', attrs=['bold']) + ' Go Back')
 
@@ -361,7 +374,7 @@ def landing(prompt,url_temp,output_temp):
                     header("wappalyzer")
                     url.wappalyzer() #Start Wappalyzer Scan
 
-                if resp == '2':
+                elif resp == '2':
                     url = TECHNOLOGY_LOOKUP() # call the class
                     header("cmseek")
                     url.cmseek() #Start CMSeeK Scan
