@@ -25,3 +25,8 @@ pip install -r requirements.txt
 
 cd ..
 
+#Wmap Database Connect
+#Start PostgreSQL Service
+sudo service postgresql start
+#initialise MS PostgreSQL DB
+sudo msfdb init
