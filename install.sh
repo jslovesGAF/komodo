@@ -30,3 +30,9 @@ cd ..
 sudo service postgresql start
 #initialise MS PostgreSQL DB
 sudo msfdb init
+
+#wpscan update database
+sudo wpscan --update
+
+#install txt2html 
+sudo apt install txt2html
