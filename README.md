@@ -37,6 +37,8 @@ Written in Python, runs in the command line.
 - Python (3.10.5) (https://www.python.org/downloads/)
 - Kali Linux (needs root privileges)
 
+sudo apt update && sudo apt upgrade
+sudo apt-get -y install python3
 Run install.sh to install necessary dependencies.
 
 
