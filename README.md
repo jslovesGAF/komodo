@@ -43,12 +43,6 @@ sudo apt-get -y install python3
 
 Run install.sh to install necessary dependencies.
 
-
-### EXAMPLES ###
-
-Read EXAMPLES.txt
-
-
 ### CONTACT ###
 
 Official Email:   joshua.sloves@gaf.com
