@@ -444,10 +444,10 @@ def validateURL(validURL, url_temp, output_temp):
     url = url_temp
     global output
     output = output_temp
-    
+
     #User input for URL Prefix and Target
     while validURL == False:
-        prefix = input('Enter 1 for '+colored('HTTPS','yellow')+' or 2 for '+colored('HTTP','yellow')+': ')
+        prefix = input('Enter "1" for '+colored('HTTPS','yellow')+' or "2" for '+colored('HTTP','yellow')+': ')
         if prefix == '1':
             target = input('('+colored('HTTPS','yellow')+' Selected) Enter the target URL or IP Address: ')
             
@@ -489,6 +489,75 @@ def validateURL(validURL, url_temp, output_temp):
         else:
             print(colored('\nInvalid Input.','red', attrs=['bold']))
 
+def qualysOptions(response,validURL,url,output):
+    
+    print(colored('\n1. "Run Monday"','white',
+                  attrs=['bold']))
+    print(colored('2. "Run Friday"','white',
+                  attrs=['bold']))
+    print(colored('3. Create New Sets','green',
+                  attrs=['bold']))
+
+    print(colored('99.','red', attrs=['bold']) + ' Go Back')
+
+    response = input('Choose an option to proceed: ')
+    
+    if response == "1":
+        os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+        os.system('sh run_monday')
+
+    elif response == "2":
+        os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+        os.system('sh run_friday')
+
+    elif response == "3":
+        if len(os.listdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')) == 0:
+            print("Directory is empty")
+        else:    
+            os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/*')
+
+        os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+
+        os.system('sh create_set1')
+        os.system('sh create_set2')
+
+        os.system('cp -a /home/kali/Desktop/Qualys\ Scripts/Test/. /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/')
+        os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')
+        os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set1')
+        os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set2')
+        os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file1.txt')
+        os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file2.txt')
+        os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/README.txt')
+        os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/update_test.xml')
+
+        os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+        for file in os.listdir('/home/kali/Desktop/Qualys Scripts/Test/'):
+            if file.startswith("update1_") or file.startswith("update2_"):
+                command = 'rm '+str(file)
+                os.system(command)
+
+    elif response == '99':
+        validateIntent(validURL,url,output)
+        
+    else:
+        print('\n['+str(response)+']'+colored(' Invalid tool option. Please try again!\n','red',
+            attrs=['bold']))
+        qualysOptions(response,validURL,url,output)
+    
+def validateIntent(validURL,url,output):
+    validIntent = False
+
+    while validIntent == False:
+        response = input('\nEnter "1" for '+colored('Qualys Script Management','yellow')+' or "2" for '+colored('Target Scanning','yellow')+': ')
+        if response == '1':
+            validIntent = True
+            qualysOptions(response,validURL,url,output)
+            validateIntent(validURL,url,output)
+        elif response == '2':
+            validateURL(validURL,url,output) 
+        else:
+            print('\n['+str(response)+']'+colored(' Invalid tool option. Please try again!\n','red',
+                attrs=['bold']))
 #Main
 def main():
 
@@ -505,7 +574,8 @@ def main():
     validURL = False
     
     #Initial Screen
-    validateURL(validURL,url,output) 
+    validateIntent(validURL,url,output)
+    #validateURL(validURL,url,output) 
 
 if __name__ == '__main__':
     main()
