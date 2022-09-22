@@ -15,8 +15,15 @@ git clone --depth 1 https://github.com/drwetter/testssl.sh.git
 #Dotdotpwn 
 sudo apt install dotdotpwn
 
+#Dotdotpwn 
+sudo apt install nuclei
+nuclei
+
 #CheckURL
 git clone https://github.com/UndeadSec/checkURL.git
+
+#Gobuster
+sudo apt install gobuster
 
 #CMSeeK
 git clone https://github.com/Tuhinshubhra/CMSeeK

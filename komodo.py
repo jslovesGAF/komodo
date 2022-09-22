@@ -70,22 +70,22 @@ class TECHNOLOGY_LOOKUP:
             os.chdir('..')
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
         
-    def cmseek(self):
-        global url
-        global output
-        url = self.url
-        output = self.output
-
-        try:
-            print('Lauching CMSeeK Detection on {}'.format(self.url))
-            os.chdir('CMSeeK')
-            cmd = str('python cmseek.py -u {url} | tee /dev/stderr | txt2html -extract -8 >> ../html/{file} '.format(url=self.url,file=self.output))
-            os.system(cmd)
-            os.chdir('..')
-            print('CMSeeK Successfully Executed')
-        except:
-            os.chdir('..')
-            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+##    def cmseek(self):
+##        global url
+##        global output
+##        url = self.url
+##        output = self.output
+##
+##        try:
+##            print('Lauching CMSeeK Detection on {}'.format(self.url))
+##            os.chdir('CMSeeK')
+##            cmd = str('python cmseek.py -u {url} | tee /dev/stderr | txt2html -extract -8 >> ../html/{file} '.format(url=self.url,file=self.output))
+##            os.system(cmd)
+##            os.chdir('..')
+##            print('CMSeeK Successfully Executed')
+##        except:
+##            os.chdir('..')
+##            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
   
 class VULNERABILITY:
     def __init__(self):
@@ -138,9 +138,37 @@ class VULNERABILITY:
                 new = orig.replace('http://',"",1)
                 
             print('Running DotDotPwn Against {}'.format(new))
-            cmd = str('dotdotpwn -m http -h {url}| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
+            cmd = str('dotdotpwn -m http -h {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
             os.system(cmd)
             print('DotDotPwn Successfully Executed')
+        except:
+            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+
+    def sqlmap(self):
+        global url
+        global output
+        url = self.url
+        output = self.output
+        
+        try:
+            print('Running SQLmap Against {}'.format(self.url))
+            cmd = str('sqlmap {url} --disable-coloring | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url,file=self.output))
+            os.system(cmd)
+            print('SQLmap Successfully Executed')
+        except:
+            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+
+    def nuclei(self):
+        global url
+        global output
+        url = self.url
+        output = self.output
+        
+        try:
+            print('Running Nuclei Against {}'.format(self.url))
+            cmd = str('nuclei -u {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url,file=self.output))
+            os.system(cmd)
+            print('Nuclei Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -171,6 +199,29 @@ class INFORMATION_GATHERING:
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
+
+    # Network Mapper
+    def traceroute(self):
+        global url
+        global output
+        url = self.url
+        output = self.output
+
+        try:
+            print("Launching aggressive Traceroute Scan\n")
+            orig = str(self.url)
+
+            if 'https://' in orig:
+                new = orig.replace('https://',"",1)
+            elif 'http://' in orig:
+                new = orig.replace('http://',"",1)
+
+            cmd = str('traceroute {url}| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
+            os.system(cmd)
+            print('Traceroute Successfully Executed')
+        except:
+            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+
     # Test TLS/SSL Encryption
     def testssl(self):
         global url
@@ -189,6 +240,46 @@ class INFORMATION_GATHERING:
             os.chdir('..')
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
+    # Whatweb Lookup
+    def whatweb(self):
+        global url
+        global output
+        url = self.url
+        output = self.output
+        
+        try:
+            print("Launching WhatWeb Scan\n")
+            cmd = str('whatweb {url} --color=never| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url, file=output))
+            os.system(cmd)
+            print('WhatWeb Successfully Executed')
+        except:
+
+            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+            
+    # WHOIS Lookup
+    def whois(self):
+        global url
+        global output
+        url = self.url
+        orig = str(self.url)
+        output = self.output
+
+        try:
+            print("Launching WHOIS Scan\n")
+            #regular expression to replace all link issues i.e. / & .
+            rep = {"https://": "", "http://": ""} #define desired replacements here
+
+            #these three lines do the replacing
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], orig))
+            ip = socket.gethostbyname(new)
+            
+            cmd = str('whois '+ip+'| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(file=output))
+            os.system(cmd)
+        except:
+            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+            
     # URL Reputation Checker
     def checkURL(self):
         global url
@@ -208,20 +299,18 @@ class INFORMATION_GATHERING:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
         
     # Brute force directories and file names on web application servers
-    def dirbuster(self):
+    def gobuster(self):
         global url
         global output
         url = self.url
         output = self.output
         
         try:
-            print("DirBuster Scan Not Currently Functional!\n")
-##            os.chdir('python-dirbuster')
-##            cmd = str('python dirbust.py '+self.url+'/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt')
-##            os.system(cmd)
-##            os.chdir('..')
+            print("Launching GoBuster Scan\n")
+            cmd = str('gobuster dir -u {url} -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -q| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url, file=output))
+            os.system(cmd)
+            print('WhatWeb Successfully Executed')
         except:
-            os.chdir('/kali/home/komodo')
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
 def header(tool):
@@ -234,14 +323,23 @@ def header(tool):
         if tool == "nmap":
             f.write(str("<h1 style='color: red;'>NMAP</h1>"))
             f.write(current_time)
+        elif tool == "traceroute":
+            f.write(str("<h1 style='color: red;'>Traceroute</h1>"))
+            f.write(current_time)
         elif tool == "testssl":
             f.write(str("<h1 style='color: red;'>TESTSSL</h1>"))
+            f.write(current_time)
+        elif tool == "whatweb":
+            f.write(str("<h1 style='color: red;'>WhatWeb</h1>"))
+            f.write(current_time)
+        elif tool == "whois":
+            f.write(str("<h1 style='color: red;'>WHOIS</h1>"))
             f.write(current_time)
         elif tool == "checkURL":
             f.write(str("<h1 style='color: red;'>CheckURL</h1>"))
             f.write(current_time)
-        elif tool == "dirbuster":
-            f.write(str("<h1 style='color: red;'>DirBuster</h1>"))
+        elif tool == "gobuster":
+            f.write(str("<h1 style='color: red;'>GoBuster</h1>"))
             f.write(current_time)
         elif tool == "nikto":
             f.write(str("<h1 style='color: red;'>Nikto</h1>"))
@@ -252,12 +350,18 @@ def header(tool):
         elif tool == "dotdotpwn":
             f.write(str("<h1 style='color: red;'>DotDotPWN</h1>")) 
             f.write(current_time)
+        elif tool == "sqlmap":
+            f.write(str("<h1 style='color: red;'>SQLmap</h1>"))
+            f.write(current_time)
+        elif tool == "nuclei":
+            f.write(str("<h1 style='color: red;'>Nuclei</h1>"))
+            f.write(current_time)
         elif tool == "wappalyzer":
             f.write(str("<h1 style='color: red;'>Wappalyzer</h1>"))
             f.write(current_time)
-        elif tool == "cmseek":
-            f.write(str("<h1 style='color: red;'>CMSeek</h1>"))
-            f.write(current_time)
+##        elif tool == "cmseek":
+##            f.write(str("<h1 style='color: red;'>CMSeek</h1>"))
+##            f.write(current_time)
         elif tool == "MSWmap":
             f.write(str("<h1 style='color: red;'>MS Wmap</h1>"))    
             f.write(current_time)
@@ -278,10 +382,12 @@ def landing(prompt,url_temp,output_temp):
         print(colored('\n***Preparing INFORMATION GATHERING Scans***','cyan',
                       attrs=['bold','blink']))
         print('1. Nmap - Network Mapper')
-        print('2. Testssl.sh - Test TLS/SSL Encryption')
-        print('3. CheckURL - URL Reputation Checker')
-        print('4. DirBuster - Brute Force Directories '+
-              colored('(NOT CURRENTLY SUPPORTED)','red'))
+        print('2. Traceroute - Packet Routing')
+        print('3. Testssl.sh - Test TLS/SSL Encryption')
+        print('4. WhatWeb - Modern Web Scanner')
+        print('5. WHOIS - IP Lookup')        
+        print('6. CheckURL - URL Reputation Checker')
+        print('7. GoBuster - Brute Force Directories ')
         print(colored('99.','red', attrs=['bold']) + ' Go Back')
 
         print(colored("\n-- syntax: 1245 --", "yellow"))
@@ -296,21 +402,33 @@ def landing(prompt,url_temp,output_temp):
                     url = INFORMATION_GATHERING() # call the class
                     header("nmap")
                     url.nmap() #Start nmap scan
-
+                    
                 elif resp == '2':
+                    url = INFORMATION_GATHERING() # call the class
+                    header("traceroute")
+                    url.traceroute() #Start testssl.sh scan
+                    
+                elif resp == '3':
                     url = INFORMATION_GATHERING() # call the class
                     header("testssl")
                     url.testssl() #Start testssl.sh scan
-
-                elif resp == '3':
-                    url = INFORMATION_GATHERING() # call the class
-                    header("checkURL")
-                    url.checkURL() #Start CheckURL scan
-
+                    
                 elif resp == '4':
                     url = INFORMATION_GATHERING() # call the class
-                    header("disbuster")
-                    url.dirbuster() #Start DirBuster scan
+                    header("whatweb")
+                    url.whatweb() #Start WhatWeb scan
+                    
+                elif resp == '5':
+                    url = INFORMATION_GATHERING() # call the class
+                    header("whois")
+                    url.whois() #Start WHOIS scan
+                    
+
+
+                elif resp == '7':
+                    url = INFORMATION_GATHERING() # call the class
+                    header("gobuster")
+                    url.gobuster() #Start GoBuster scan
      
                 else:
                     print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
@@ -324,6 +442,8 @@ def landing(prompt,url_temp,output_temp):
         print('2. WPScan - Wordpress WebApp Vulnerability Scanner')
         print('3. DotDotPwn - Directory Traversal Exploiter '+
               colored('(Warning: Likely Long Run Time)','red'))
+        print('4. SQLmap - Detect & Exploit SQL injection flaws')
+        print('5. Nuclei - Template Based Vulnerability Scanner')
         print(colored('99.','red', attrs=['bold']) + ' Go Back')
 
         print(colored("\n-- syntax: 1245 --", "yellow"))
@@ -348,7 +468,17 @@ def landing(prompt,url_temp,output_temp):
                     url = VULNERABILITY() # call the class
                     header("dotdotpwn")
                     url.dotdotpwn() #Start DotDotPwn Scan
-        
+                    
+                elif resp == '4':
+                    url = VULNERABILITY() # call the class
+                    header("sqlmap")
+                    url.sqlmap() #Start SQLmap Scan
+                    
+                elif resp == '5':
+                    url = VULNERABILITY() # call the class
+                    header("nuclei")
+                    url.nuclei() #Start Nuclei Scan
+
                 else:
                     print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
                         attrs=['bold']))
@@ -358,7 +488,7 @@ def landing(prompt,url_temp,output_temp):
         print(colored('\n***Preparing TECHNOLOGY LOOKUP Scans***\n','green',
                       attrs=['bold','blink']))
         print('1. Wappalyzer - Underlying Technology Lookup')
-        print('2. CMSeeK - Basic CMS Detection')
+##        print('2. CMSeeK - Basic CMS Detection')
         print(colored('99.','red', attrs=['bold']) + ' Go Back')
 
         print(colored("\n-- syntax: 1245 --", "yellow"))
@@ -374,10 +504,10 @@ def landing(prompt,url_temp,output_temp):
                     header("wappalyzer")
                     url.wappalyzer() #Start Wappalyzer Scan
 
-                elif resp == '2':
-                    url = TECHNOLOGY_LOOKUP() # call the class
-                    header("cmseek")
-                    url.cmseek() #Start CMSeeK Scan
+##                elif resp == '2':
+##                    url = TECHNOLOGY_LOOKUP() # call the class
+##                    header("cmseek")
+##                    url.cmseek() #Start CMSeeK Scan
                     
                 else:
                     print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
