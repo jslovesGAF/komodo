@@ -9,6 +9,9 @@ python3 -m pip install python-Wappalyzer
 pip install art==5.7
 pip install termcolor
 
+#lolcat
+pip install lolcat
+
 #testssl 
 git clone --depth 1 https://github.com/drwetter/testssl.sh.git
 
