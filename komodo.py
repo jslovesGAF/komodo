@@ -10,227 +10,260 @@ from termcolor import colored, cprint
 from art import *
 from Wappalyzer import Wappalyzer, WebPage
 key = ""
+configType = "None"
+scopeURL = ""
 
-def refreshPage(key,webpage):
-    webpageTemp = webpage
-    url = requests.get(webpageTemp)
-    text = url.text
-    data = json.loads(text)
-    scan_metricsDict = data['scan_metrics']
-    return scan_metricsDict
 
-def loadData(key,webpage):
-    webpageTemp = webpage
-    url = requests.get(webpageTemp)
-    text = url.text
-    data = json.loads(text)
-    return data
+class BURPSUITE():
+    def refreshPage(self,key,webpage):
+        webpageTemp = webpage
+        url = requests.get(webpageTemp)
+        text = url.text
+        data = json.loads(text)
+        scan_metricsDict = data['scan_metrics']
+        return scan_metricsDict
 
-def api():
-    global key
-    print('Current API Key: '+key)
-    key = input("Please enter your Burpsuite API Key: ")
-    validAPI = True
-    os.system('clear')
-    storeKey()
-    
-    burpSelections()
-    
-def storeKey():
-    global key
-    if key == "":
-        return key
-    else:
-        keyTemp = key
-        return keyTemp
+    def loadData(self,key,webpage):
+        webpageTemp = webpage
+        url = requests.get(webpageTemp)
+        text = url.text
+        data = json.loads(text)
+        return data
 
-def refreshBurpScan(key):
-    for i in range(50):
-        webpage = 'http://127.0.0.1:1337/'+key+'/v0.1/scan/'+str(i)
-        data = loadData(api,webpage)
-        
-        if "error" in data:
-            #print('error found!')
-            if data['error']=="Task ID not found":
-                #print('task ID not found error')
-                continue
-            elif data['error']=="Unauthorized":
-                #print('unauth error')
-                continue
-
-        elif "scan_status" in data:
-            if data['scan_status'] == "succeeded":
-                print('Task_ID '+data['task_id']+' scan successful.\n')
-                continue
-            elif data['scan_status'] == "failed":
-                print('Task_ID '+data['task_id']+' scan failed. Check Burp.\n')
-                continue
-            
-            print('Task_ID '+data['task_id']+' status:')
-            progress = 0
-
-            while progress < 100:
-                scan_metricsDict = refreshPage(api,webpage)
-                progress = scan_metricsDict['crawl_and_audit_progress']
-                os.system('clear')
-                print('Scanning... '+str(scan_metricsDict['crawl_and_audit_progress'])+'%')
-                print('Scan progress: '+str(scan_metricsDict['crawl_and_audit_progress'])+'% complete.\n')
-                time.sleep(5)
-                if progress == 100:
-                    print('Task_ID '+data['task_id']+' scan successful.\n')
-
-def startBurpScan(key,url,scopeURLTemp,configTypeTemp):
-    global scopeURL
-    global configType
-    #targetURL = 'https://google-gruyere.appspot.com/593948396113602183495718301495133174940'
-    targetURL = url
-
-    scopeURL = scopeURLTemp
-    configType = configTypeTemp
-    
-    burpURL = str('\'http://127.0.0.1:1337/'+key+'/v0.1/scan\'')
-    cmdURL = str('curl -vgw "\\n" -X POST {url} -d '.format(url=burpURL))
-    cmdScope = str(',"scope":{"include":[{"rule":"'+'{url}'.format(url=targetURL)+'"}],'+'"type":"SimpleScope"},"urls":["'+'{url}'.format(url=targetURL)+'"]}\'')
-    
-    cmdConfig = str('\''+'{"scan_configurations":[{"name":"Crawl and Audit - Fast","type":"NamedConfiguration"''}]')
-    cmd = str(cmdURL+cmdConfig+cmdScope)
-    announcement = 'echo '+'\''+configType+' scan on '+targetURL+' with a scope of '+scopeURL+'\' | lolcat'
-    os.system(announcement)
-    confirm = input('Would you like to proceed? y/n \n')
-    if confirm == 'y':
-        os.system(cmd)
-    elif confirm == 'n':
-        os.system('clear')
-        burpSelections()
-    else:
-        print('\n['+str(selected)+']'+colored(' Invalid selection. Please try again!\n','red',attrs=['bold']))
-        
-
-def burpSelections():
-    global key
-    global scopeURL
-    global configType
-    scopeURL = url
-    configType = "None"
-    if key == "":
-        burpLanding()
-    else:
-        validURL = True
+    def api(self):
+        global key
+        print('\nCurrent API Key: '+str(key))
+        key = input("Please enter your Burpsuite API Key: ")
         validAPI = True
-        while validAPI == True:
-            #print(colored('Burp Key is: ','white', attrs=['bold'])+storeKey())
-            print(colored('Target URL is: ','white', attrs=['bold'])+url)
-            print(colored('Scan Scope is: ','white', attrs=['bold'])+scopeURL)
-            print(colored('Scan Configuration is: ','white', attrs=['bold'])+configType)
+        os.system('clear')
+        
+        burp.storeKey()
+        burp.burpSelections()
+        
+    def storeKey(self):
+        global key
+        if key == "":
+            return key
+        else:
+            keyTemp = key
+            return keyTemp
 
+    def refreshBurpScan(self,key):
+        for i in range(50):
+            webpage = 'http://127.0.0.1:1337/'+key+'/v0.1/scan/'+str(i)
+            data = burp.loadData(key,webpage)
+            
+            if "error" in data:
+                if data['error']=="Task ID not found":
+                    continue
+                elif data['error']=="Unauthorized":
+                    continue
 
-            print(colored('\n*** Preparing BURPSUITE ***','yellow',
-                          attrs=['bold','blink']))
-            print('1. Launch Scan')
-            print('2. Change Scope (Default is Target URL)')
-            print('3. Change Scan Configuration')
-            print('4. View Report')
-            print('5. Update API Key ')
-            print(colored('99.','red', attrs=['bold']) + ' Go Back')
-
-            selected = input('\nChoose an option to proceed: ')
-            if selected == '1':
-                os.system('clear')
-                print(colored('*** Launching Burp Scan (NOTE: 30s scan progress refresh interval) ***','yellow',
-                              attrs=['bold']))
-                startBurpScan(key,url,scopeURL,configType)
-                refreshBurpScan(key)
+            elif "scan_status" in data:
+                if data['scan_status'] == "succeeded":
+                    print('Task_ID '+data['task_id']+' scan successful.\n')
+                    continue
+                elif data['scan_status'] == "failed":
+                    print('Task_ID '+data['task_id']+' scan failed. Check Burp.\n')
+                    continue
                 
-            elif selected == '2':
-                os.system('clear')
-                print(colored('*** Enter new Target Scope URL or "',attrs=['bold'])+(colored('99','red', attrs=['bold'])+colored('" to go back: ***','white',attrs=['bold'])))
-                scopeURL = input()
-                if scopeURL == '99':
-                    os.system('clear')
-                    burpSelections()
-                os.system('clear')
+                print('Task_ID '+data['task_id']+' status:')
+                progress = 0
+                try:
+                    while progress < 100:
+                        scan_metricsDict = burp.refreshPage(key,webpage)
+                        progress = scan_metricsDict['crawl_and_audit_progress']
+                        os.system('clear')
+                        print('Task_ID '+data['task_id']+' is scanning... Ctrl+C to exit back to main menu.')
+                        print('Scan progress: '+str(scan_metricsDict['crawl_and_audit_progress'])+'% complete.\n')
+                        time.sleep(10)
+                        if progress == 100:
+                            print('Task_ID '+data['task_id']+' scan successful.\n')
+                except:
+                    print(' Check Burp.\n')
 
-            elif selected == '3':
+    def startBurpScan(self,key,url,scopeURLTemp,configTypeTemp):
+        global scopeURL
+        global configType
+        #targetURL = 'google-gruyere.appspot.com/593948396113602183495718301495133174940'
+        targetURL = url
+        scopeURL = scopeURLTemp
+        configType = configTypeTemp
+        
+        burpURL = str('\'http://127.0.0.1:1337/'+str(key)+'/v0.1/scan\'')
+        cmdURL = str('curl -vgw "\\n" -X POST {url} -d '.format(url=burpURL))
+
+        if (scopeURL != targetURL) and (scopeURL != ""):
+            cmdScope = str(',"scope":{"include":[{"rule":"'+'{url}'.format(url=scopeURL)+'"}],'+'"type":"SimpleScope"},"urls":["'+'{url}'.format(url=scopeURL)+'"]}\'')
+        else:
+            scopeURL = targetURL 
+            cmdScope = str(',"scope":{"include":[{"rule":"'+'{url}'.format(url=targetURL)+'"}],'+'"type":"SimpleScope"},"urls":["'+'{url}'.format(url=targetURL)+'"]}\'')
+        cmdConfig = str('\''+'{"scan_configurations":[{"name":"Crawl and Audit - Fast","type":"NamedConfiguration"''}]')
+        
+        cmd = str(cmdURL+cmdConfig+cmdScope)
+        announcement = 'echo '+'\''+configType+' scan on '+targetURL+' with a scope of '+scopeURL+'\' | lolcat'
+        os.system(announcement)
+
+        if configType == "None": 
+            confirm = input('\nWould you like to proceed? y/n '+colored('- Warning, no scan config selected.\n','red',attrs=['bold']))
+            if confirm == 'y':
+                print(colored('No config type specified. Please try again.\n','red',attrs=['bold']))
+                burp.burpSelections()
+            elif confirm == 'n':
                 os.system('clear')
-                print(colored('*** Change Scan Configuration ***','white',
-                              attrs=['bold']))
-                print('1. Crawl and Audit - Fast')
-                print('2. Crawl and Audit - Balanced')
-                print('3. Crawl and Audit - Deep')
-                print('4. Crawl and Audit - Lightweight')
-                os.system("echo 'More configurations coming soon! :-)\n' | lolcat")
-                print(colored('99.','red', attrs=['bold']) + ' Go Back')
+                burp.burpSelections()
+            else:
+                os.system('clear')
+                invalidSelection(confirm)
+                burp.startBurpScan(key,url,scopeURLTemp,configTypeTemp)
+        else:
+            confirm = input('\nWould you like to proceed? y/n\n')
+            if confirm == 'y':
+                os.system(cmd)
+            elif confirm == 'n':
+                os.system('clear')
+                burp.burpSelections()
+            else:
+                os.system('clear')
+                invalidSelection(confirm)
+                burp.startBurpScan(key,url,scopeURLTemp,configTypeTemp)
+
+        #print(colored('Error starting scan. Please try again!\n','red',attrs=['bold']))
+        #burp.burpSelections()
+            
+    def burpSelections(self):
+        global key
+        global scopeURL
+        global configType
+        
+        if key == "":
+            burp.burpLanding()
+        else:
+            validURL = True
+            validAPI = True
+            while validAPI == True:
+                #print(colored('Burp Key is: ','white', attrs=['bold'])+storeKey())
+                print(colored('\nTarget URL is: ','white', attrs=['bold'])+url)
+                print(colored('Scan Scope is: ','white', attrs=['bold'])+scopeURL)
+                print(colored('Scan Configuration is: ','white', attrs=['bold'])+configType)
+
+                print(colored('\n*** Preparing BURPSUITE ***','yellow',attrs=['bold','blink']))
+                print('1. Launch Scan')
+                print('2. Change Scope (Default is Target URL)')
+                print('3. Change Scan Configuration')
+                print('4. View Report')
+                print('5. Update API Key ')
+
+                print(colored('\n0. Change Target','red', attrs=['bold']))
+                print(colored('99. Go Back','red', attrs=['bold']))
 
                 selected = input('\nChoose an option to proceed: ')
-                
                 if selected == '1':
                     os.system('clear')
-                    configType = 'Crawl and Audit - Fast'
+                    print(colored('*** Launching Burp Scan (NOTE: 10s scan progress refresh interval) ***','yellow',
+                                  attrs=['bold']))
+                    burp.startBurpScan(key,url,scopeURL,configType)
+                    burp.refreshBurpScan(key)
+                    
                 elif selected == '2':
                     os.system('clear')
-                    configType = 'Crawl and Audit - Balanced'
+                    print(colored('*** Enter new Target Scope URL or "',attrs=['bold'])+(colored('99','red', attrs=['bold'])+colored('" to go back: ***','white',attrs=['bold'])))
+                    scopeURL = input()
+                    
+                    if scopeURL == '99':
+                        scopeURL = ""
+                        os.system('clear')
+                        burp.burpSelections()
+                    os.system('clear')
+
                 elif selected == '3':
                     os.system('clear')
-                    configType = 'Crawl and Audit - Deep'
+                    print(colored('*** Change Scan Configuration ***','white',
+                                  attrs=['bold']))
+                    print('1. Crawl and Audit - Fast')
+                    print('2. Crawl and Audit - Balanced')
+                    print('3. Crawl and Audit - Deep')
+                    print('4. Crawl and Audit - Lightweight')
+                    os.system("echo 'More configurations coming soon! :-)\n' | lolcat")
+                    print(colored('99. Go Back','red', attrs=['bold']))
+
+                    selected = input('\nChoose an option to proceed: ')
+                    
+                    if selected == '1':
+                        os.system('clear')
+                        configType = 'Crawl and Audit - Fast'
+                    elif selected == '2':
+                        os.system('clear')
+                        configType = 'Crawl and Audit - Balanced'
+                    elif selected == '3':
+                        os.system('clear')
+                        configType = 'Crawl and Audit - Deep'
+                    elif selected == '4':
+                        os.system('clear')
+                        configType = 'Crawl and Audit - Lightweight'
+                    elif selected == '99':
+                        os.system('clear')
+                        burp.burpSelections()
+                    else:
+                        invalidSelection(selected)
+
                 elif selected == '4':
                     os.system('clear')
-                    configType = 'Crawl and Audit - Lightweight'
+                    print('***REPORT VIEWING IS WIP***\n')
+                    
+                elif selected == '5':
+                    os.system('clear')
+                    validAPI = False
+                    burp.api()
+                    
                 elif selected == '99':
                     os.system('clear')
-                    burpSelections()
+                    initial(validURL,url,output)
+
+                elif selected == '0':
+                    changeTarget(validURL,url,output)
+
                 else:
-                    print('\n['+str(selected)+']'+colored(' Invalid selection. Please try again!\n','red',attrs=['bold']))
+                    invalidSelection(selected)
+                    burp.burpSelections()
 
-            elif selected == '4':
-                os.system('clear')
-                print('viewing report')
+    def burpLanding(self):
+        global key
+        validURL = True
+        burp = BURPSUITE()
+        if key == "":
+            validAPI = False
+            while validAPI == False:
+                #print(colored('Burp Key is: ','white', attrs=['bold'])+storeKey(key))
+                print(colored('Target URL is: ','white', attrs=['bold'])+url)
+
+                print(colored('\n***Preparing BURPSUITE***','yellow',
+                              attrs=['bold','blink']))
+                print('1. Start Scan')
+                print('2. Change Scope')
+                print('3. Change Scan Type')
+                print('4. View Report')
+                print('5. Update API Key '+colored('*IMPORTANT: KEY IS CLEARED AFTER KOMODO TERMINATES. DO THIS FIRST.','red', attrs=['bold','underline']))
+                print(colored('\n0. Change Target','red', attrs=['bold']))
+                print(colored('99. Go Back','red', attrs=['bold']))
+
+                selected = input('\nChoose an option to proceed: ')
+                if selected == '5':
+                    burp.api()
                 
-            elif selected == '5':
-                os.system('clear')
-                validAPI = False
-                api()
-                
-            elif selected == '99':
-                os.system('clear')
-                initial(validURL,url,output)
+                elif selected == '99':
+                    os.system('clear')
+                    initial(validURL,url,output)
 
-            else:
-                print('\n['+str(selected)+']'+colored(' Invalid selection. Please try again!\n','red',attrs=['bold']))
-                burpSelections(storedKey())
-
-def burpLanding():
-    global key
-    validURL = True
-    if key == "":
-        validAPI = False
-        while validAPI == False:
-            #print(colored('Burp Key is: ','white', attrs=['bold'])+storeKey(key))
-            print(colored('Target URL is: ','white', attrs=['bold'])+url)
-
-            print(colored('\n***Preparing BURPSUITE***','yellow',
-                          attrs=['bold','blink']))
-            print('1. Start Scan')
-            print('2. Change Scope')
-            print('3. Change Scan Type')
-            print('4. View Report')
-            print('5. Update API Key '+colored('*IMPORTANT: KEY IS CLEARED AFTER KOMODO TERMINATES. DO THIS FIRST.','red', attrs=['bold','underline']))
-            print(colored('99.','red', attrs=['bold']) + ' Go Back')
-
-            selected = input('\nChoose an option to proceed: ')
-            if selected == '5':
-                api()
-            
-            elif selected == '99':
-                os.system('clear')
-                initial(validURL,url,output)
-                
-            else:
-                os.system('clear')
-                print(colored('Error. Did you forget your API key?\n','red',
-                              attrs=['bold']))
-                continue
-    else:
-        burpSelections()
+                elif selected == '0':
+                    changeTarget(validURL,url,output)
+        
+                else:
+                    os.system('clear')
+                    print(colored('Error. Did you forget your API key?\n','red',attrs=['bold']))
+                    continue
+        else:
+            burp.burpSelections()
         
 def wappalyzer():
     global output
@@ -535,30 +568,25 @@ class INFORMATION_GATHERING:
 
 class QUALYS: 
     def qualysLanding(self):
-        
-        print(colored('\n1. "Run Monday"','white',
-                      attrs=['bold']))
-        print(colored('2. "Run Friday"','white',
-                      attrs=['bold']))
-        print(colored('3. Create New Sets','green',
-                      attrs=['bold']))
+        print(colored('\n1. "Run Monday"','white',attrs=['bold']))
+        print(colored('2. "Run Friday"','white',attrs=['bold']))
+        print(colored('3. Create New Sets','green', attrs=['bold']))
+        print(colored('99. Go Back','red', attrs=['bold']))
 
-        print(colored('99.','red', attrs=['bold']) + ' Go Back')
-
-        selection = input('Choose an option to proceed: ')
+        selected = input('Choose an option to proceed: ')
         try:
             #Run Monday Script
-            if selection == "1":
+            if selected == "1":
                 os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
                 os.system('sh run_monday')
                 
             #Run Friday Script
-            elif selection == "2":
+            elif selected == "2":
                 os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
                 os.system('sh run_friday')
 
             #Create New Sets & Delete Old
-            elif selection == "3":
+            elif selected == "3":
                 if len(os.listdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')) == 0:
                     print("Directory is empty")
                 else:    
@@ -584,21 +612,21 @@ class QUALYS:
                         command = 'rm '+str(file)
                         os.system(command)
 
-            elif selection == '99':
+            elif selected == '99':
                 os.system('clear')
-                return
                 
             else:
-                print('\n['+str(response)+']'+colored(' Invalid tool option. Please try again!\n','red',attrs=['bold']))
-                x = QUALYS
-                x.qualysLanding(self)
+                invalidSelection(selected)
+                obj = QUALYS
+                obj.qualysLanding(self)
         except:
-                print(colored('Error. Is the directory on your desktop?\n','red',attrs=['bold']))
+               print(colored('Error. Is the directory on your desktop?\n','red',attrs=['bold']))
 
 def header(tool):
     seperator = str("<p>" + ("-"*40) + "<br>" + "</p>")
     current_time = "<p>Ran on: <i>"+ str(datetime.datetime.now()) + "</i></p>"
     os.chdir('html')
+    
     #open the output file & append to it
     with open(output, "a") as f:
         f.write(seperator)
@@ -651,7 +679,7 @@ def header(tool):
         f.close()
     os.chdir('..')
   
-def landing(prompt,url_temp,output_temp):
+def landing(selected,url_temp,output_temp):
     global url
     global output
     global key
@@ -660,14 +688,14 @@ def landing(prompt,url_temp,output_temp):
     validURL = True
     url = str(url_temp)
     
-    if prompt.lower() == 'b':
-        burpLanding()
+    if selected.lower() == 'b':
+        burp.burpLanding()
         
-    if prompt.lower() == 'w':
+    elif selected.lower() == 'w':
         header("wappalyzer")
         wappalyzer()
 
-    elif prompt == '1':
+    elif selected == '1':
         print(colored('\nCurrent Target: '+url,
                       attrs=['bold']))
         print(colored('\n***Preparing INFORMATION GATHERING Scans***','cyan',
@@ -679,17 +707,17 @@ def landing(prompt,url_temp,output_temp):
         print('5. WHOIS - IP Lookup')        
         print('6. CheckURL - URL Reputation Checker')
         print('7. GoBuster - Brute Force Directories ')
-        print(colored('99.','red', attrs=['bold']) + ' Go Back')
+        print(colored('99. Go Back','red', attrs=['bold']))
 
         print(colored("-- syntax: 1245 --\n", "yellow"))
-        options = input('Choose an option to proceed: ')
+        selected = input('Choose an option to proceed: ')
         
-        if options == '99':
+        if selected == '99':
             os.system('clear')
             initial(validURL,url,output)
 
         else:
-            for selection in options:
+            for selection in selected:
                 if selection == '1':
                     obj = INFORMATION_GATHERING() # call the class
                     header("nmap")
@@ -714,6 +742,11 @@ def landing(prompt,url_temp,output_temp):
                     obj = INFORMATION_GATHERING() # call the class
                     header("whois")
                     obj.whois() #Start WHOIS scan
+
+                elif selection == '6':
+                    obj = INFORMATION_GATHERING() # call the class
+                    header("checkURL")
+                    obj.checkURL() #Start checkURL scan
                     
                 elif selection == '7':
                     obj = INFORMATION_GATHERING() # call the class
@@ -721,10 +754,9 @@ def landing(prompt,url_temp,output_temp):
                     obj.gobuster() #Start GoBuster scan
      
                 else:
-                    print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
-                        attrs=['bold']))
+                    invalidSelection(selected)
 
-    elif prompt == '2':
+    elif selected == '2':
         print(colored('\nCurrent Target: '+url,
                       attrs=['bold']))
         print(colored('\n***Preparing VULNERABILITY Scans***','yellow',
@@ -735,17 +767,17 @@ def landing(prompt,url_temp,output_temp):
               colored('(Warning: Likely Long Run Time)','red'))
         print('4. SQLmap - Detect & Exploit SQL injection flaws')
         print('5. Nuclei - Template Based Vulnerability Scanner')
-        print(colored('99.','red', attrs=['bold']) + ' Go Back')
+        print(colored('99. Go Back','red', attrs=['bold']))
 
         print(colored("\n-- syntax: 1245 --", "yellow"))
-        options = input('Choose an option to proceed: ').lower()
+        selected = input('Choose an option to proceed: ').lower()
         
-        if options == '99':
+        if selected == '99':
             os.system('clear')
             initial(validURL,url,output)
 
         else:
-            for selection in options:
+            for selection in selected:
                 if selection == '1':
                     obj = VULNERABILITY() # call the class
                     header("nikto")
@@ -770,12 +802,10 @@ def landing(prompt,url_temp,output_temp):
                     obj = VULNERABILITY() # call the class
                     header("nuclei")
                     obj.nuclei() #Start Nuclei Scan
-
                 else:
-                    print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
-                        attrs=['bold']))
+                    invalidSelection(selected)
 
-##    elif prompt == '3':
+##    elif selected == '3':
 ##        print(colored('\nCurrent Target: '+url,
 ##                      attrs=['bold']))
 ##        print(colored('\n***Preparing TECHNOLOGY LOOKUP Scans***','green',
@@ -785,14 +815,14 @@ def landing(prompt,url_temp,output_temp):
 ##        print(colored('99.','red', attrs=['bold']) + ' Go Back')
 ##
 ##        print(colored("\n-- syntax: 1245 --", "yellow"))
-##        options = input('Choose an option to proceed: ')
+##        selected = input('Choose an option to proceed: ')
 ##        
-##        if options == '99':
+##        if selected == '99':
 ##            os.system('clear')
 ##            initial(validURL,url,output)
 ##
 ##        else:
-##            for selection in options:
+##            for selection in selected:
 ##                if selection == '1':
 ##                    obj = TECHNOLOGY_LOOKUP() # call the class
 ##                    header("wappalyzer")
@@ -807,23 +837,21 @@ def landing(prompt,url_temp,output_temp):
 ##                    print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
 ##                        attrs=['bold']))
 
-    elif prompt == '3':
-        print(colored('\nCurrent Target: '+url,
-                      attrs=['bold']))
-        print(colored('\n***Preparing EXPLOIT Scans***','magenta'
-                      ,attrs=['bold','blink']))
+    elif selected == '3':
+        print(colored('\nCurrent Target: '+url,attrs=['bold']))
+        print(colored('\n***Preparing EXPLOIT Scans***','magenta',attrs=['bold','blink']))
         print('1. Metasploit: WMAP - Web App Vuln. Scanner Conducted Within Metasploit framework')
-        print(colored('99.','red', attrs=['bold']) + ' Go Back')
+        print(colored('99. Go Back','red', attrs=['bold']))
 
         print(colored("\n-- syntax: 1245 --", "yellow"))
-        options = input('Choose an option to proceed: ')
+        selected = input('Choose an option to proceed: ')
         
-        if options == '99':
+        if selected == '99':
             os.system('clear')
             initial(validURL,url,output)
 
         else:
-            for selection in options:
+            for selection in selected:
                 if selection == '1':
                     obj = EXPLOITS() # call the class
                     header("MSWmap")
@@ -831,19 +859,17 @@ def landing(prompt,url_temp,output_temp):
                     print('Metasploit: WMAP Successfully Executed')
                     
                 else:
-                    print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
-                        attrs=['bold']))
+                    invalidSelection(selected)
 
-    elif prompt == '0':
-        validURL = False
-        validateURL(validURL,url,output) 
+    elif selected == '0':
+        changeTarget(validURL,url,output)
 
-    elif prompt == '99':
+    elif selected == '99':
         sys.exit(colored('\nTerminating KOMODO (╯°□°）╯︵ ┻━┻','red', attrs=['bold']))
                
     else:
-        print(colored('\nInvalid input. Please try again!\n','red',
-                      attrs=['bold']))
+        invalidSelection(selected)
+
 
 def initial(validURL,url_temp,output_temp):   
     while validURL == True:
@@ -858,20 +884,19 @@ def initial(validURL,url_temp,output_temp):
         print(colored('b. BurpSuite','white'))
         print(colored('w. Wappalyzer','white'))
 
-
         # other tool selection
         text = colored('\n- - - - - RECON | LIGHTWEIGHT VULN. SCANS | EXPLOITS - - - - -','red', attrs=['bold'])
         cprint(text, "yellow", "on_white")
         print(colored('1. Information Gathering','white'))
         print(colored('2. Vulnerability','white'))
-        #print(colored('3. Technology Lookup','white'))
         print(colored('3. Exploits','white'))
+        
         print(colored('\n0. Change Target', 'red', attrs=['bold']))
         print(colored('99. Exit', 'red', attrs=['bold']))
 
-        prompt = input('\nChoose a category to proceed: ')
+        selection = input('\nChoose a category to proceed: ')
         os.system('clear')
-        landing(prompt,url,output)
+        landing(selection,url,output)
 
 def validateURL(validURL, url_temp, output_temp):
     global url
@@ -881,8 +906,8 @@ def validateURL(validURL, url_temp, output_temp):
 
     #User input for URL Prefix and Target
     while validURL == False:
-        prefix = input('Enter "1" for '+colored('HTTPS','yellow')+' or "2" for '+colored('HTTP','yellow')+': ')
-        if prefix == '1':
+        selected = input('Enter "1" for '+colored('HTTPS','yellow')+' or "2" for '+colored('HTTP','yellow')+': ')
+        if selected == '1':
             target = input('('+colored('HTTPS','yellow')+' Selected) Enter the target URL or IP Address: ')
             
             #regular expression to replace all link issues i.e. / & . for html files
@@ -895,13 +920,11 @@ def validateURL(validURL, url_temp, output_temp):
              
             url = 'https://'+str(target)
             validURL = True
-            #print ("URL SUCCESSFULLY VALIDATED") #for debugging
-            print(colored('\nCurrent Target: '+url,
-                    attrs=['bold']))
-
+            
+            print(colored('\nCurrent Target: '+url,attrs=['bold']))
             initial(validURL,url,output)
 
-        elif prefix == '2':
+        elif selected == '2':
             target = input('('+colored('HTTP','yellow')+' Selected) Enter the target URL or IP Address: ')
 
             #regular expression to replace all link issues i.e. / & . for html files
@@ -914,32 +937,37 @@ def validateURL(validURL, url_temp, output_temp):
             
             url = 'http://'+str(target)
             validURL = True
-            #print ("URL SUCCESSFULLY VALIDATED") #for debugging
-            print(colored('\nCurrent Target: '+url,
-                    attrs=['bold']))
-
-            initial(validURL,url,output)
             
+            print(colored('\nCurrent Target: '+url,attrs=['bold']))
+            initial(validURL,url,output)
         else:
-            print(colored('\nInvalid Input.','red', attrs=['bold']))
+            invalidSelection(selected)
 
 def validateIntent(validURL,url,output):
     validIntent = False
-
     while validIntent == False:
-        response = input('\nEnter "1" for '+colored('Qualys Script Management','yellow')+' or "2" for '+colored('Penetrating Testing','red')+': ')
-        if response == '1':
+        selected = input('\nEnter "1" for '+colored('Qualys Script Management','yellow')+' or "2" for '+colored('Penetration Testing','red')+': ')
+        if selected == '1':
             os.system('clear')
             validIntent = True
-            x = QUALYS()
-            x.qualysLanding()
+            obj = QUALYS()
+            obj.qualysLanding()
             validateIntent(validURL,url,output)
-        elif response == '2':
+        elif selected == '2':
             os.system('clear')
             validateURL(validURL,url,output) 
         else:
-            print('\n['+str(response)+']'+colored(' Invalid tool option. Please try again!\n','red',
-                attrs=['bold']))
+            invalidSelection(selected)
+
+def changeTarget(validURL,url,output):
+    os.system('clear')
+    validURL = False
+    validateURL(validURL,url,output)
+
+def invalidSelection(selected):
+    os.system('clear')
+    print('\n['+str(selected)+']'+colored(' Invalid input. Please try again.\n','red',attrs=['bold']))
+
 #Main
 def main():
     os.system('clear')
@@ -961,4 +989,5 @@ def main():
     validateIntent(validURL,url,output)
 
 if __name__ == '__main__':
+    burp = BURPSUITE()
     main()
