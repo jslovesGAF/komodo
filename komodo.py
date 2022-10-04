@@ -546,53 +546,54 @@ class QUALYS:
         print(colored('99.','red', attrs=['bold']) + ' Go Back')
 
         selection = input('Choose an option to proceed: ')
+        try:
+            #Run Monday Script
+            if selection == "1":
+                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+                os.system('sh run_monday')
+                
+            #Run Friday Script
+            elif selection == "2":
+                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+                os.system('sh run_friday')
 
-        #Run Monday Script
-        if selection == "1":
-            os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
-            os.system('sh run_monday')
-            
-        #Run Friday Script
-        elif selection == "2":
-            os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
-            os.system('sh run_friday')
+            #Create New Sets & Delete Old
+            elif selection == "3":
+                if len(os.listdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')) == 0:
+                    print("Directory is empty")
+                else:    
+                    os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/*')
 
-        #Create New Sets & Delete Old
-        elif selection == "3":
-            if len(os.listdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')) == 0:
-                print("Directory is empty")
-            else:    
-                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/*')
+                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
 
-            os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+                os.system('sh create_set1')
+                os.system('sh create_set2')
 
-            os.system('sh create_set1')
-            os.system('sh create_set2')
+                os.system('cp -a /home/kali/Desktop/Qualys\ Scripts/Test/. /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/')
+                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set1')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set2')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file1.txt')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file2.txt')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/README.txt')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/update_test.xml')
 
-            os.system('cp -a /home/kali/Desktop/Qualys\ Scripts/Test/. /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/')
-            os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')
-            os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set1')
-            os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set2')
-            os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file1.txt')
-            os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file2.txt')
-            os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/README.txt')
-            os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/update_test.xml')
+                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+                for file in os.listdir('/home/kali/Desktop/Qualys Scripts/Test/'):
+                    if file.startswith("update1_") or file.startswith("update2_"):
+                        command = 'rm '+str(file)
+                        os.system(command)
 
-            os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
-            for file in os.listdir('/home/kali/Desktop/Qualys Scripts/Test/'):
-                if file.startswith("update1_") or file.startswith("update2_"):
-                    command = 'rm '+str(file)
-                    os.system(command)
-
-        elif selection == '99':
-            os.system('clear')
-            return
-            
-        else:
-            print('\n['+str(response)+']'+colored(' Invalid tool option. Please try again!\n','red',
-                attrs=['bold']))
-            x = QUALYS
-            x.qualysLanding(self)
+            elif selection == '99':
+                os.system('clear')
+                return
+                
+            else:
+                print('\n['+str(response)+']'+colored(' Invalid tool option. Please try again!\n','red',attrs=['bold']))
+                x = QUALYS
+                x.qualysLanding(self)
+        except:
+                print(colored('Error. Is the directory on your desktop?\n','red',attrs=['bold']))
 
 def header(tool):
     seperator = str("<p>" + ("-"*40) + "<br>" + "</p>")
