@@ -6,11 +6,11 @@ echo "------ Running all neccesssary installations for KOMODO ------"
 python3 -m pip install python-Wappalyzer
 
 #Art - for tprint
-pip install art==5.7
-pip install termcolor
+sudo pip install art==5.7
+sudo pip install termcolor
 
 #lolcat
-pip install lolcat
+sudo pip install lolcat
 
 #testssl 
 git clone --depth 1 https://github.com/drwetter/testssl.sh.git

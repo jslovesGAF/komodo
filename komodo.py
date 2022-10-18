@@ -1,7 +1,7 @@
 # KOMODO All-in-one Hacking Tool
 # Joshua Sloves / Ethan Tomford
 
-####### SAMPLE TARGET https://google-gruyere.appspot.com/593948396113602183495718301495133174940/
+####### SAMPLE TARGET google-gruyere.appspot.com/593948396113602183495718301495133174940
 ####### SAMPLE TARGET scanme.nmap.org
 #######
 
@@ -12,7 +12,6 @@ from Wappalyzer import Wappalyzer, WebPage
 key = ""
 configType = "None"
 scopeURL = ""
-
 
 class BURPSUITE():
     def refreshPage(self,key,webpage):
