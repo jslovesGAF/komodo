@@ -2,6 +2,10 @@
 
 echo "------ Running all neccesssary installations for KOMODO ------"
 
+sudo apt-get update
+sudo apt-get install idle3
+sudo apt-get install python-is-python3
+
 #Wappalzyer 
 python3 -m pip install python-Wappalyzer
 
@@ -27,11 +31,6 @@ git clone https://github.com/UndeadSec/checkURL.git
 
 #Gobuster
 sudo apt install gobuster
-
-#CMSeeK
-git clone https://github.com/Tuhinshubhra/CMSeeK
-cd CMSeeK
-pip install -r requirements.txt
 
 cd ..
 
