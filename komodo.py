@@ -969,6 +969,8 @@ def invalidSelection(selected):
 
 #Main
 def main():
+    print('Grabbing latest updates...'
+    os.system('git pull')
     os.system('clear')
     #Print KOMODO Title
     print((('*' * 50) + '\n') * 3)
