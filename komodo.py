@@ -969,7 +969,7 @@ def invalidSelection(selected):
 
 #Main
 def main():
-    print('Grabbing latest updates...'
+    print('Grabbing latest updates...')
     os.system('git pull')
     os.system('clear')
     #Print KOMODO Title
