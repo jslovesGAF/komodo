@@ -12,7 +12,7 @@ from Wappalyzer import Wappalyzer, WebPage
 key = ""
 configType = "None"
 scopeURL = ""
-
+test = ""
 class BURPSUITE():
     def refreshPage(self,key,webpage):
         webpageTemp = webpage
@@ -35,10 +35,10 @@ class BURPSUITE():
         key = input("Please enter your Burpsuite API Key: ")
         validAPI = True
         os.system('clear')
-        
+
         burp.storeKey()
         burp.burpSelections()
-        
+
     def storeKey(self):
         global key
         if key == "":
@@ -51,7 +51,7 @@ class BURPSUITE():
         for i in range(50):
             webpage = 'http://127.0.0.1:1337/'+key+'/v0.1/scan/'+str(i)
             data = burp.loadData(key,webpage)
-            
+
             if "error" in data:
                 if data['error']=="Task ID not found":
                     continue
@@ -65,7 +65,7 @@ class BURPSUITE():
                 elif data['scan_status'] == "failed":
                     print('Task_ID '+data['task_id']+' scan failed. Check Burp.\n')
                     continue
-                
+
                 print('Task_ID '+data['task_id']+' status:')
                 progress = 0
                 try:
@@ -88,22 +88,22 @@ class BURPSUITE():
         targetURL = url
         scopeURL = scopeURLTemp
         configType = configTypeTemp
-        
+
         burpURL = str('\'http://127.0.0.1:1337/'+str(key)+'/v0.1/scan\'')
         cmdURL = str('curl -vgw "\\n" -X POST {url} -d '.format(url=burpURL))
 
         if (scopeURL != targetURL) and (scopeURL != ""):
             cmdScope = str(',"scope":{"include":[{"rule":"'+'{url}'.format(url=scopeURL)+'"}],'+'"type":"SimpleScope"},"urls":["'+'{url}'.format(url=scopeURL)+'"]}\'')
         else:
-            scopeURL = targetURL 
+            scopeURL = targetURL
             cmdScope = str(',"scope":{"include":[{"rule":"'+'{url}'.format(url=targetURL)+'"}],'+'"type":"SimpleScope"},"urls":["'+'{url}'.format(url=targetURL)+'"]}\'')
         cmdConfig = str('\''+'{"scan_configurations":[{"name":"Crawl and Audit - Fast","type":"NamedConfiguration"''}]')
-        
+
         cmd = str(cmdURL+cmdConfig+cmdScope)
         announcement = 'echo '+'\''+configType+' scan on '+targetURL+' with a scope of '+scopeURL+'\' | lolcat'
         os.system(announcement)
 
-        if configType == "None": 
+        if configType == "None":
             confirm = input('\nWould you like to proceed? y/n '+colored('- Warning, no scan config selected.\n','red',attrs=['bold']))
             if confirm == 'y':
                 print(colored('No config type specified. Please try again.\n','red',attrs=['bold']))
@@ -129,12 +129,12 @@ class BURPSUITE():
 
         #print(colored('Error starting scan. Please try again!\n','red',attrs=['bold']))
         #burp.burpSelections()
-            
+
     def burpSelections(self):
         global key
         global scopeURL
         global configType
-        
+
         if key == "":
             burp.burpLanding()
         else:
@@ -163,12 +163,12 @@ class BURPSUITE():
                                   attrs=['bold']))
                     burp.startBurpScan(key,url,scopeURL,configType)
                     burp.refreshBurpScan(key)
-                    
+
                 elif selected == '2':
                     os.system('clear')
                     print(colored('*** Enter new Target Scope URL or "',attrs=['bold'])+(colored('99','red', attrs=['bold'])+colored('" to go back: ***','white',attrs=['bold'])))
                     scopeURL = input()
-                    
+
                     if scopeURL == '99':
                         scopeURL = ""
                         os.system('clear')
@@ -187,7 +187,7 @@ class BURPSUITE():
                     print(colored('99. Go Back','red', attrs=['bold']))
 
                     selected = input('\nChoose an option to proceed: ')
-                    
+
                     if selected == '1':
                         os.system('clear')
                         configType = 'Crawl and Audit - Fast'
@@ -209,12 +209,12 @@ class BURPSUITE():
                 elif selected == '4':
                     os.system('clear')
                     print('***REPORT VIEWING IS WIP***\n')
-                    
+
                 elif selected == '5':
                     os.system('clear')
                     validAPI = False
                     burp.api()
-                    
+
                 elif selected == '99':
                     os.system('clear')
                     initial(validURL,url,output)
@@ -249,26 +249,26 @@ class BURPSUITE():
                 selected = input('\nChoose an option to proceed: ')
                 if selected == '5':
                     burp.api()
-                
+
                 elif selected == '99':
                     os.system('clear')
                     initial(validURL,url,output)
 
                 elif selected == '0':
                     changeTarget(validURL,url,output)
-        
+
                 else:
                     os.system('clear')
                     print(colored('Error. Did you forget your API key?\n','red',attrs=['bold']))
                     continue
         else:
             burp.burpSelections()
-        
+
 def wappalyzer():
     global output
     global url
 
-    try:   
+    try:
         os.chdir('html')
         with open(output, "a") as f:
             webpage = WebPage.new_from_url(url)
@@ -309,19 +309,19 @@ class EXPLOITS:
             pattern = re.compile("|".join(rep.keys()))
             new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], orig))
             ip = socket.gethostbyname(new)
-            
+
             cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/komodo/fav_modules;exit'+"'"+"| tee /dev/stderr | txt2html -extract -8 >> html/{file}".format(file=output))
             os.system(cmd)
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-                      
+
 ##class TECHNOLOGY_LOOKUP:
 ##    def __init__(self):
 ##        self.url = url
 ##        self.output = output
 
 ##    # Discover WebApp underlying technology
-  
+
 ##    def cmseek(self):
 ##        global url
 ##        global output
@@ -338,7 +338,7 @@ class EXPLOITS:
 ##        except:
 ##            os.chdir('..')
 ##            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-  
+
 class VULNERABILITY:
     def __init__(self):
         self.url = url
@@ -358,14 +358,14 @@ class VULNERABILITY:
             print('Nikto Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-            
+
     # Wordpress WebApp Vulnerability Scanner
     def WPScan(self):
         global url
         global output
         url = self.url
         output = self.output
-        
+
         try:
             print('Running WPScan Against {}'.format(self.url))
             cmd = str('wpscan --url {url} --no-update --no-banner | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url,file=self.output))
@@ -380,15 +380,15 @@ class VULNERABILITY:
         global output
         url = self.url
         output = self.output
-        
+
         orig = str(self.url)
-        
+
         try:
             if 'https://' in orig:
                 new = orig.replace('https://',"",1)
             elif 'http://' in orig:
                 new = orig.replace('http://',"",1)
-                
+
             print('Running DotDotPwn Against {}'.format(new))
             cmd = str('dotdotpwn -m http -h {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
             os.system(cmd)
@@ -401,7 +401,7 @@ class VULNERABILITY:
         global output
         url = self.url
         output = self.output
-        
+
         try:
             print('Running SQLmap Against {}'.format(self.url))
             cmd = str('sqlmap {url} --disable-coloring | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url,file=self.output))
@@ -415,7 +415,7 @@ class VULNERABILITY:
         global output
         url = self.url
         output = self.output
-        
+
         try:
             print('Running Nuclei Against {}'.format(self.url))
             cmd = str('nuclei -u {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url,file=self.output))
@@ -480,7 +480,7 @@ class INFORMATION_GATHERING:
         global output
         url = self.url
         output = self.output
-        
+
         try:
             print("Launching TestSSL Scan\n")
             os.chdir('testssl.sh')
@@ -498,7 +498,7 @@ class INFORMATION_GATHERING:
         global output
         url = self.url
         output = self.output
-        
+
         try:
             print("Launching WhatWeb Scan\n")
             cmd = str('whatweb {url} --color=never| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url, file=output))
@@ -507,7 +507,7 @@ class INFORMATION_GATHERING:
         except:
 
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-            
+
     # WHOIS Lookup
     def whois(self):
         global url
@@ -526,19 +526,19 @@ class INFORMATION_GATHERING:
             pattern = re.compile("|".join(rep.keys()))
             new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], orig))
             ip = socket.gethostbyname(new)
-            
+
             cmd = str('whois '+ip+'| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(file=output))
             os.system(cmd)
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-            
+
     # URL Reputation Checker
     def checkURL(self):
         global url
         global output
         url = self.url
         output = self.output
-        
+
         try:
             print("Launching CheckURL Scan\n")
             os.chdir('checkURL')
@@ -549,14 +549,14 @@ class INFORMATION_GATHERING:
         except:
             os.chdir('..')
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-        
+
     # Brute force directories and file names on web application servers
     def gobuster(self):
         global url
         global output
         url = self.url
         output = self.output
-        
+
         try:
             print("Launching GoBuster Scan\n")
             cmd = str('gobuster dir -u {url} -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -q| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url, file=output))
@@ -565,7 +565,7 @@ class INFORMATION_GATHERING:
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
-class QUALYS: 
+class QUALYS:
     def qualysLanding(self):
         print(colored('\n1. "Run Monday"','white',attrs=['bold']))
         print(colored('2. "Run Friday"','white',attrs=['bold']))
@@ -578,7 +578,7 @@ class QUALYS:
             if selected == "1":
                 os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
                 os.system('sh run_monday')
-                
+
             #Run Friday Script
             elif selected == "2":
                 os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
@@ -588,7 +588,7 @@ class QUALYS:
             elif selected == "3":
                 if len(os.listdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')) == 0:
                     print("Directory is empty")
-                else:    
+                else:
                     os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/*')
 
                 os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
@@ -613,7 +613,7 @@ class QUALYS:
 
             elif selected == '99':
                 os.system('clear')
-                
+
             else:
                 invalidSelection(selected)
                 obj = QUALYS
@@ -625,7 +625,7 @@ def header(tool):
     seperator = str("<p>" + ("-"*40) + "<br>" + "</p>")
     current_time = "<p>Ran on: <i>"+ str(datetime.datetime.now()) + "</i></p>"
     os.chdir('html')
-    
+
     #open the output file & append to it
     with open(output, "a") as f:
         f.write(seperator)
@@ -654,10 +654,10 @@ def header(tool):
             f.write(str("<h1 style='color: red;'>Nikto</h1>"))
             f.write(current_time)
         elif tool == "WPscan":
-            f.write(str("<h1 style='color: red;'>WPScan</h1>")) 
+            f.write(str("<h1 style='color: red;'>WPScan</h1>"))
             f.write(current_time)
         elif tool == "dotdotpwn":
-            f.write(str("<h1 style='color: red;'>DotDotPWN</h1>")) 
+            f.write(str("<h1 style='color: red;'>DotDotPWN</h1>"))
             f.write(current_time)
         elif tool == "sqlmap":
             f.write(str("<h1 style='color: red;'>SQLmap</h1>"))
@@ -672,24 +672,24 @@ def header(tool):
 ##            f.write(str("<h1 style='color: red;'>CMSeek</h1>"))
 ##            f.write(current_time)
         elif tool == "MSWmap":
-            f.write(str("<h1 style='color: red;'>MS Wmap</h1>"))    
+            f.write(str("<h1 style='color: red;'>MS Wmap</h1>"))
             f.write(current_time)
         f.write(seperator)
         f.close()
     os.chdir('..')
-  
+
 def landing(selected,url_temp,output_temp):
     global url
     global output
     global key
-    
+
     output = output_temp
     validURL = True
     url = str(url_temp)
-    
+
     if selected.lower() == 'b':
         burp.burpLanding()
-        
+
     elif selected.lower() == 'w':
         header("wappalyzer")
         wappalyzer()
@@ -703,14 +703,14 @@ def landing(selected,url_temp,output_temp):
         print('2. Traceroute - Packet Routing')
         print('3. Testssl.sh - Test TLS/SSL Encryption')
         print('4. WhatWeb - Modern Web Scanner')
-        print('5. WHOIS - IP Lookup')        
+        print('5. WHOIS - IP Lookup')
         print('6. CheckURL - URL Reputation Checker')
         print('7. GoBuster - Brute Force Directories ')
         print(colored('99. Go Back','red', attrs=['bold']))
 
         print(colored("-- syntax: 1245 --\n", "yellow"))
         selected = input('Choose an option to proceed: ')
-        
+
         if selected == '99':
             os.system('clear')
             initial(validURL,url,output)
@@ -721,22 +721,22 @@ def landing(selected,url_temp,output_temp):
                     obj = INFORMATION_GATHERING() # call the class
                     header("nmap")
                     obj.nmap() #Start nmap scan
-                    
+
                 elif selection == '2':
                     obj = INFORMATION_GATHERING() # call the class
                     header("traceroute")
                     obj.traceroute() #Start testssl.sh scan
-                    
+
                 elif selection == '3':
                     obj = INFORMATION_GATHERING() # call the class
                     header("testssl")
                     obj.testssl() #Start testssl.sh scan
-                    
+
                 elif selection == '4':
                     obj = INFORMATION_GATHERING() # call the class
                     header("whatweb")
                     obj.whatweb() #Start WhatWeb scan
-                    
+
                 elif selection == '5':
                     obj = INFORMATION_GATHERING() # call the class
                     header("whois")
@@ -746,12 +746,12 @@ def landing(selected,url_temp,output_temp):
                     obj = INFORMATION_GATHERING() # call the class
                     header("checkURL")
                     obj.checkURL() #Start checkURL scan
-                    
+
                 elif selection == '7':
                     obj = INFORMATION_GATHERING() # call the class
                     header("gobuster")
                     obj.gobuster() #Start GoBuster scan
-     
+
                 else:
                     invalidSelection(selected)
 
@@ -770,7 +770,7 @@ def landing(selected,url_temp,output_temp):
 
         print(colored("\n-- syntax: 1245 --", "yellow"))
         selected = input('Choose an option to proceed: ').lower()
-        
+
         if selected == '99':
             os.system('clear')
             initial(validURL,url,output)
@@ -791,12 +791,12 @@ def landing(selected,url_temp,output_temp):
                     obj = VULNERABILITY() # call the class
                     header("dotdotpwn")
                     obj.dotdotpwn() #Start DotDotPwn Scan
-                    
+
                 elif selection == '4':
                     obj = VULNERABILITY() # call the class
                     header("sqlmap")
                     obj.sqlmap() #Start SQLmap Scan
-                    
+
                 elif selection == '5':
                     obj = VULNERABILITY() # call the class
                     header("nuclei")
@@ -815,7 +815,7 @@ def landing(selected,url_temp,output_temp):
 ##
 ##        print(colored("\n-- syntax: 1245 --", "yellow"))
 ##        selected = input('Choose an option to proceed: ')
-##        
+##
 ##        if selected == '99':
 ##            os.system('clear')
 ##            initial(validURL,url,output)
@@ -831,7 +831,7 @@ def landing(selected,url_temp,output_temp):
 ##                    url = TECHNOLOGY_LOOKUP() # call the class
 ##                    header("cmseek")
 ##                    url.cmseek() #Start CMSeeK Scan
-##                    
+##
 ##                else:
 ##                    print('\n['+str(resp)+']'+colored(' Invalid tool option. Please try again!\n','red',
 ##                        attrs=['bold']))
@@ -844,7 +844,7 @@ def landing(selected,url_temp,output_temp):
 
         print(colored("\n-- syntax: 1245 --", "yellow"))
         selected = input('Choose an option to proceed: ')
-        
+
         if selected == '99':
             os.system('clear')
             initial(validURL,url,output)
@@ -856,7 +856,7 @@ def landing(selected,url_temp,output_temp):
                     header("MSWmap")
                     obj.MSWmap() #Start WMAP scan
                     print('Metasploit: WMAP Successfully Executed')
-                    
+
                 else:
                     invalidSelection(selected)
 
@@ -865,18 +865,18 @@ def landing(selected,url_temp,output_temp):
 
     elif selected == '99':
         sys.exit(colored('\nTerminating KOMODO (╯°□°）╯︵ ┻━┻','red', attrs=['bold']))
-               
+
     else:
         invalidSelection(selected)
 
 
-def initial(validURL,url_temp,output_temp):   
+def initial(validURL,url_temp,output_temp):
     while validURL == True:
         global url
         url = url_temp
         global output
         output = output_temp
-        
+
         # API tool selection
         text = colored('\n- - - - - APIs - - - - -','red', attrs=['bold'])
         cprint(text, "yellow", "on_white")
@@ -889,7 +889,7 @@ def initial(validURL,url_temp,output_temp):
         print(colored('1. Information Gathering','white'))
         print(colored('2. Vulnerability','white'))
         print(colored('3. Exploits','white'))
-        
+
         print(colored('\n0. Change Target', 'red', attrs=['bold']))
         print(colored('99. Exit', 'red', attrs=['bold']))
 
@@ -908,7 +908,7 @@ def validateURL(validURL, url_temp, output_temp):
         selected = input('Enter "1" for '+colored('HTTPS','yellow')+' or "2" for '+colored('HTTP','yellow')+': ')
         if selected == '1':
             target = input('('+colored('HTTPS','yellow')+' Selected) Enter the target URL or IP Address: ')
-            
+
             #regular expression to replace all link issues i.e. / & . for html files
             rep = {"/": "-", ".com": "", ".": "-"} #define desired replacements here
 
@@ -916,10 +916,10 @@ def validateURL(validURL, url_temp, output_temp):
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
             output = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target)) + ".html"
-             
+
             url = 'https://'+str(target)
             validURL = True
-            
+
             print(colored('\nCurrent Target: '+url,attrs=['bold']))
             initial(validURL,url,output)
 
@@ -933,10 +933,10 @@ def validateURL(validURL, url_temp, output_temp):
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
             output = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target)) + ".html"
-            
+
             url = 'http://'+str(target)
             validURL = True
-            
+
             print(colored('\nCurrent Target: '+url,attrs=['bold']))
             initial(validURL,url,output)
         else:
@@ -954,7 +954,7 @@ def validateIntent(validURL,url,output):
             validateIntent(validURL,url,output)
         elif selected == '2':
             os.system('clear')
-            validateURL(validURL,url,output) 
+            validateURL(validURL,url,output)
         else:
             invalidSelection(selected)
 
@@ -979,13 +979,13 @@ def main():
 
     global url
     global output
-    
+
     os.system("echo 'NEW FEATURES ALERT!\nIntroducing... \n- Full BurpSuite REST API support!\n- Reworked Tool Selection!\n- Friendlier (and fancier) UI!' | lolcat")
 
     url = ""
     output = ""
     validURL = False
-    
+
     #Initial Screen
     validateIntent(validURL,url,output)
 
