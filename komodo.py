@@ -12,7 +12,7 @@ from Wappalyzer import Wappalyzer, WebPage
 key = ""
 configType = "None"
 scopeURL = ""
-test = ""
+
 class BURPSUITE():
     def refreshPage(self,key,webpage):
         webpageTemp = webpage
