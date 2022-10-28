@@ -4,7 +4,7 @@
 ####### SAMPLE TARGET google-gruyere.appspot.com/593948396113602183495718301495133174940
 ####### SAMPLE TARGET scanme.nmap.org
 #######
-#10/28
+
 import os, warnings, sys, re, datetime, socket, subprocess, urllib.request, json, requests, time
 from termcolor import colored, cprint
 from art import *
