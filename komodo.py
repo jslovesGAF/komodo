@@ -4,15 +4,31 @@
 ####### SAMPLE TARGET google-gruyere.appspot.com/593948396113602183495718301495133174940
 ####### SAMPLE TARGET scanme.nmap.org
 #######
+<<<<<<< HEAD
 ## 10/28
+=======
+
+>>>>>>> 5774d6c (removed wrong komodo version)
 import os, warnings, sys, re, datetime, socket, subprocess, urllib.request, json, requests, time
 from termcolor import colored, cprint
 from art import *
 from Wappalyzer import Wappalyzer, WebPage
+<<<<<<< HEAD
 key = ""
 configType = "None"
 scopeURL = ""
 
+=======
+from bs4 import BeautifulSoup
+import subprocess
+
+key = ""
+configType = "None"
+scopeURL = ""
+home = os.getcwd()
+
+####################################### BEGINNING OF API SECTION #######################################
+>>>>>>> 5774d6c (removed wrong komodo version)
 class BURPSUITE():
     def refreshPage(self,key,webpage):
         webpageTemp = webpage
@@ -127,9 +143,12 @@ class BURPSUITE():
                 invalidSelection(confirm)
                 burp.startBurpScan(key,url,scopeURLTemp,configTypeTemp)
 
+<<<<<<< HEAD
         #print(colored('Error starting scan. Please try again!\n','red',attrs=['bold']))
         #burp.burpSelections()
 
+=======
+>>>>>>> 5774d6c (removed wrong komodo version)
     def burpSelections(self):
         global key
         global scopeURL
@@ -220,7 +239,11 @@ class BURPSUITE():
                     initial(validURL,url,output)
 
                 elif selected == '0':
+<<<<<<< HEAD
                     changeTarget(validURL,url,output)
+=======
+                    changeTarget(validURL,url)
+>>>>>>> 5774d6c (removed wrong komodo version)
 
                 else:
                     invalidSelection(selected)
@@ -255,7 +278,11 @@ class BURPSUITE():
                     initial(validURL,url,output)
 
                 elif selected == '0':
+<<<<<<< HEAD
                     changeTarget(validURL,url,output)
+=======
+                    changeTarget(validURL,url)
+>>>>>>> 5774d6c (removed wrong komodo version)
 
                 else:
                     os.system('clear')
@@ -264,6 +291,7 @@ class BURPSUITE():
         else:
             burp.burpSelections()
 
+<<<<<<< HEAD
 def wappalyzer():
     global output
     global url
@@ -343,6 +371,122 @@ class VULNERABILITY:
     def __init__(self):
         self.url = url
         self.output = output
+=======
+##class QUALYS:
+##    def qualysLanding(self):
+##        print(colored('\n1. "Run Monday"','white',attrs=['bold']))
+##        print(colored('2. "Run Friday"','white',attrs=['bold']))
+##        print(colored('3. Create New Sets','green', attrs=['bold']))
+##        print(colored('99. Go Back','red', attrs=['bold']))
+##
+##        selected = input('Choose an option to proceed: ')
+##        try:
+##            #Run Monday Script
+##            if selected == "1":
+##                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+##                os.system('sh run_monday')
+##
+##            #Run Friday Script
+##            elif selected == "2":
+##                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+##                os.system('sh run_friday')
+##
+##            #Create New Sets & Delete Old
+##            elif selected == "3":
+##                if len(os.listdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')) == 0:
+##                    print("Directory is empty")
+##                else:
+##                    os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/*')
+##
+##                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+##
+##                os.system('sh create_set1')
+##                os.system('sh create_set2')
+##
+##                os.system('cp -a /home/kali/Desktop/Qualys\ Scripts/Test/. /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/')
+##                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')
+##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set1')
+##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set2')
+##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file1.txt')
+##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file2.txt')
+##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/README.txt')
+##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/update_test.xml')
+##
+##                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+##                for file in os.listdir('/home/kali/Desktop/Qualys Scripts/Test/'):
+##                    if file.startswith("update1_") or file.startswith("update2_"):
+##                        command = 'rm '+str(file)
+##                        os.system(command)
+##
+##            elif selected == '99':
+##                os.system('clear')
+##
+##            else:
+##                invalidSelection(selected)
+##                obj = QUALYS
+##                obj.qualysLanding(self)
+##        except:
+##               print(colored('Error. Is the directory on your desktop?\n','red',attrs=['bold']))
+##
+##def wappalyzer():
+##    global output
+##    global url
+##
+##    try:
+##        os.chdir('html')
+##        with open(output, "a") as f:
+##            webpage = WebPage.new_from_url(url)
+##            warnings.filterwarnings('ignore', message="""Caught 'unbalanced parenthesis at position 119' compiling regex""", category=UserWarning )
+##
+##            wappalyzer = Wappalyzer.latest()
+##            print(wappalyzer.analyze_with_versions_and_categories(webpage))
+##
+##            f.write(str(wappalyzer.analyze_with_versions_and_categories(webpage)))
+##            print('Running Wappalyzer technology detector on {}'.format(url))
+##            f.close()
+##        os.chdir(home)
+##        print('Wappalyzer Successfully Executed')
+##
+##    except:
+##        os.chdir(home)
+##        print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+##
+######################################### END OF API SECTION #######################################
+######################################### BEGINNING OF TOOL SECTION #######################################
+##
+##class EXPLOITS:
+##    def __init__(self):
+##        self.url = url
+##        self.output = output
+##
+##    def MSWmap(self):
+##        global url
+##        global output
+##        url = self.url
+##        orig = str(self.url)
+##        output = self.output
+##
+##        try:
+##            print('Lauching WMAP Scanner through Metasploit on {}'.format(self.url))
+##            #regular expression to replace all link issues i.e. / & .
+##            rep = {"https://": "", "http://": ""} #define desired replacements here
+##
+##            #these three lines do the replacing
+##            rep = dict((re.escape(k), v) for k, v in rep.items())
+##            pattern = re.compile("|".join(rep.keys()))
+##            new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], orig))
+##            ip = socket.gethostbyname(new)
+##
+##            cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/komodo/fav_modules;exit'+"'"+"| tee /dev/stderr | txt2html -extract -8 >> html/{file}".format(file=output))
+##            os.system(cmd)
+##        except:
+##            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+##
+class VULNERABILITY:
+    def __init__(self):
+        self.url = url
+
+>>>>>>> 5774d6c (removed wrong komodo version)
 
     # Open Source Vulnerability Scanner
     def nikto(self):
@@ -362,6 +506,7 @@ class VULNERABILITY:
     # Wordpress WebApp Vulnerability Scanner
     def WPScan(self):
         global url
+<<<<<<< HEAD
         global output
         url = self.url
         output = self.output
@@ -370,6 +515,22 @@ class VULNERABILITY:
             print('Running WPScan Against {}'.format(self.url))
             cmd = str('wpscan --url {url} --no-update --no-banner | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url,file=self.output))
             os.system(cmd)
+=======
+
+        url = self.url
+
+
+        try:
+            print('Running WPScan Against {}'.format(self.url))
+            cmd = str('wpscan --url {url} --no-update --no-banner | tee /dev/stderr | txt2html -extract'.format(url=self.url))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+
+
+            ### OUTPUT MODIFICATION HERE
+            return cmdOutput
+>>>>>>> 5774d6c (removed wrong komodo version)
             print('WPScan Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -427,14 +588,22 @@ class VULNERABILITY:
 class INFORMATION_GATHERING:
     def __init__(self):
         self.url = url
+<<<<<<< HEAD
         self.output = output
+=======
+>>>>>>> 5774d6c (removed wrong komodo version)
 
     # Network Mapper
     def nmap(self):
         global url
+<<<<<<< HEAD
         global output
         url = self.url
         output = self.output
+=======
+        url = self.url
+
+>>>>>>> 5774d6c (removed wrong komodo version)
 
         try:
             print("Launching aggressive NMAP Scan\n")
@@ -445,9 +614,23 @@ class INFORMATION_GATHERING:
             elif 'http://' in orig:
                 new = orig.replace('http://',"",1)
 
+<<<<<<< HEAD
             cmd = str('nmap -v -A -T5 {url} --stats-every 30m| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
             os.system(cmd)
             print('Nmap Successfully Executed')
+=======
+            #cmd = str('nmap -v -A -T5 {url} --stats-every 30m| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
+
+            cmd = str('nmap -v -A -T5 {url} --stats-every 30m | tee /dev/stderr | txt2html --extract'.format(url=new))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+
+
+            ### OUTPUT MODIFICATION HERE
+            print('Nmap Successfully Executed')
+            return cmdOutput
+>>>>>>> 5774d6c (removed wrong komodo version)
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -455,12 +638,20 @@ class INFORMATION_GATHERING:
     # Network Mapper
     def traceroute(self):
         global url
+<<<<<<< HEAD
         global output
         url = self.url
         output = self.output
 
         try:
             print("Launching aggressive Traceroute Scan\n")
+=======
+        url = self.url
+
+
+        try:
+            print("Launching Traceroute Scan\n")
+>>>>>>> 5774d6c (removed wrong komodo version)
             orig = str(self.url)
 
             if 'https://' in orig:
@@ -468,8 +659,22 @@ class INFORMATION_GATHERING:
             elif 'http://' in orig:
                 new = orig.replace('http://',"",1)
 
+<<<<<<< HEAD
             cmd = str('traceroute {url}| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
             os.system(cmd)
+=======
+            cmd = str('traceroute {url} | tee /dev/stderr| txt2html --extract'.format(url=new))
+            cmdOutput = pipeHelper(cmd)
+
+            ### OUTPUT MODIFICATION HERE
+            rep = {"\\n": "<br>", "b'": "","'":""} # define desired replacements here
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            cmdOutputClean = pattern.sub(lambda m: rep[re.escape(m.group(0))], str(cmdOutput))
+            ### OUTPUT MODIFICATION HERE
+
+            return cmdOutputClean
+>>>>>>> 5774d6c (removed wrong komodo version)
             print('Traceroute Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -477,6 +682,7 @@ class INFORMATION_GATHERING:
     # Test TLS/SSL Encryption
     def testssl(self):
         global url
+<<<<<<< HEAD
         global output
         url = self.url
         output = self.output
@@ -490,11 +696,33 @@ class INFORMATION_GATHERING:
             print('TestSSL Successfully Executed')
         except:
             os.chdir('..')
+=======
+        url = self.url
+
+
+        try:
+            print("Launching TestSSL Scan\n")
+            os.chdir(home+'/testssl.sh')
+
+            cmd = str('./testssl.sh -s -p -h --vulnerabilities {url} | tee /dev/stderr | txt2html --extract'.format(url=url))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+
+
+            ### OUTPUT MODIFICATION HERE
+            os.chdir(home)
+            return cmdOutput
+            print('TestSSL Successfully Executed')
+        except:
+            os.chdir(home)
+>>>>>>> 5774d6c (removed wrong komodo version)
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
     # Whatweb Lookup
     def whatweb(self):
         global url
+<<<<<<< HEAD
         global output
         url = self.url
         output = self.output
@@ -503,6 +731,22 @@ class INFORMATION_GATHERING:
             print("Launching WhatWeb Scan\n")
             cmd = str('whatweb {url} --color=never| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url, file=output))
             os.system(cmd)
+=======
+        url = self.url
+
+
+        try:
+            print("Launching WhatWeb Scan\n")
+
+            cmd = str('whatweb {url} --color=never | tee /dev/stderr | txt2html --extract'.format(url=url))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+
+
+            ### OUTPUT MODIFICATION HERE
+            return cmdOutput
+>>>>>>> 5774d6c (removed wrong komodo version)
             print('WhatWeb Successfully Executed')
         except:
 
@@ -511,10 +755,16 @@ class INFORMATION_GATHERING:
     # WHOIS Lookup
     def whois(self):
         global url
+<<<<<<< HEAD
         global output
         url = self.url
         orig = str(self.url)
         output = self.output
+=======
+        url = self.url
+        orig = str(self.url)
+
+>>>>>>> 5774d6c (removed wrong komodo version)
 
         try:
             print("Launching WHOIS Scan\n")
@@ -527,14 +777,27 @@ class INFORMATION_GATHERING:
             new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], orig))
             ip = socket.gethostbyname(new)
 
+<<<<<<< HEAD
             cmd = str('whois '+ip+'| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(file=output))
             os.system(cmd)
+=======
+            cmd = str('whois '+ip+'| tee /dev/stderr | txt2html --extract')
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+
+
+            ### OUTPUT MODIFICATION HERE
+            return cmdOutput
+            print('WHOIS Successfully Executed')
+>>>>>>> 5774d6c (removed wrong komodo version)
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
     # URL Reputation Checker
     def checkURL(self):
         global url
+<<<<<<< HEAD
         global output
         url = self.url
         output = self.output
@@ -561,10 +824,53 @@ class INFORMATION_GATHERING:
             print("Launching GoBuster Scan\n")
             cmd = str('gobuster dir -u {url} -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -q| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url, file=output))
             os.system(cmd)
+=======
+        url = self.url
+
+        try:
+            print("Launching CheckURL Scan\n")
+            os.chdir(home+'/checkURL')
+
+            cmd = str('python checkURL.py --url {url} | txt2html --extract'.format(url=url))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+        except:
+            os.chdir(home)
+            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+
+        if 'Evil URL NOT detected' in str(cmdOutput):
+            cmdOutput = 'Evil URL NOT detected'
+            os.chdir(home)
+            return cmdOutput
+        else:
+            cmdOutput = 'Evil URL detected'
+            os.chdir(home)
+            return cmdOutput
+
+    # Brute force directories and file names on web application servers
+    def gobuster(self):
+        global url
+        url = self.url
+
+
+        try:
+            print("Launching GoBuster Scan\n")
+
+            cmd = str('gobuster dir -u {url} -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -q | tee /dev/stderr | txt2html -extract'.format(url=self.url))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+
+
+            ### OUTPUT MODIFICATION HERE
+            os.chdir(home)
+            return cmdOutput
+>>>>>>> 5774d6c (removed wrong komodo version)
             print('WhatWeb Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
+<<<<<<< HEAD
 class QUALYS:
     def qualysLanding(self):
         print(colored('\n1. "Run Monday"','white',attrs=['bold']))
@@ -876,6 +1182,301 @@ def initial(validURL,url_temp,output_temp):
         url = url_temp
         global output
         output = output_temp
+=======
+####################################### END OF TOOL SECTION #######################################
+
+def write(soup):
+    os.chdir(home+'/html')
+    with open(outputFile,'w') as f:
+        f.write(str(soup))
+    os.chdir(home)
+
+def pipeHelper(cmd):
+    proc=subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, )
+    cmdOutput = proc.communicate()[0]
+    return cmdOutput
+
+def createHTML(url,fileName):
+    os.chdir('html')
+    replacements = {'NULL':url}
+    outputFile = fileName
+
+    if os.path.isfile(fileName):
+        with open(fileName, 'r') as f:
+            #outputFile = f.read()
+            print('File exists.')
+        os.chdir(home)
+        return outputFile
+    else:
+        with open('default.html') as infile, open(fileName, 'w') as outfile:
+            for line in infile:
+                for src, dest in replacements.items():
+                    line = line.replace(src, dest)
+                outfile.write(line)
+        print('File does not exist.')
+        os.chdir(home)
+        return outputFile
+
+def toolTagHelper(divName,tools,selection,cmdOutput,headerNumTemp):
+    headerNum = headerNumTemp+1
+    newHeader = '<h'+str(headerNum)+'>'
+##    toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
+##                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','\n',newHeader]
+    toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
+                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','</div>','\n',]
+    return toolTags
+
+##def scanHeaderHelper(tags):
+##
+##
+##    return initialTags
+
+##def landingHelper(url,outputFileTemp)
+##    outputFile = createHTML(url,outputFileTemp)
+##    os.chdir(home)
+##    return outputFile
+
+def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
+    global url
+    global outputFile
+    global key
+    url = str(urlTemp)
+    outputFile = outputFileTemp
+    fileName = fileNameTemp
+    initialTags = initialTagsTemp
+    
+    validURL = True
+
+    os.chdir(home)
+    os.chdir('html')
+    
+    with open(fileName) as f:
+        contents = f.read()
+        soup = BeautifulSoup(contents, 'html.parser')
+        divName = 'tool0'
+
+        headerList = soup.find_all(re.compile('^h[1-6]$'))
+        headerStr = str(headerList.pop())
+        headerStr = headerStr[1:3]
+        headerNum = int(headerStr[1:2])
+        headerTag = soup.find(headerStr)
+
+        if selected.lower() == 'b':
+            burp.burpLanding()
+
+        elif selected.lower() == 'w':
+            header("wappalyzer")
+            wappalyzer()
+
+        if selected == '1':
+            print(colored('\nCurrent Target: '+url,
+                          attrs=['bold']))
+            print(colored('\n***Preparing INFORMATION GATHERING Scans***','cyan',
+                          attrs=['bold','blink']))
+            print('1. Nmap - Network Mapper')
+            print('2. Traceroute - Packet Routing')
+            print('3. Testssl.sh - Test TLS/SSL Encryption')
+            print('4. WhatWeb - Modern Web Scanner')
+            print('5. WHOIS - IP Lookup')
+            print('6. CheckURL - URL Reputation Checker')
+            print('7. GoBuster - Brute Force Directories ')
+            print(colored('99. Go Back','red', attrs=['bold']))
+
+            print(colored("-- syntax: 1245 --\n", "yellow"))
+            selected = input('Choose an option to proceed: ')
+
+            if selected == '99':
+                os.system('clear')
+                initial(validURL,url,outputFile)
+
+            else:
+                tools = {'1':'NMAP',
+                         '2':'Traceroute',
+                         '3':'TestSSL',
+                         '4':'WhatWeb',
+                         '5':'WHOIS',
+                         '6':'CheckURL',
+                         '7':'GoBuster'}
+
+                for selection in selected:
+                    divName = 'tool'+str(selection)
+                    if selection == '1':
+                        obj = INFORMATION_GATHERING()
+                        cmdOutput = obj.nmap() #Start NMAP scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
+                        os.chdir(home)
+
+                    elif selection == '2':
+                        obj = INFORMATION_GATHERING()
+                        cmdOutput = obj.traceroute() #Start Traceroute scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
+                        os.chdir(home)
+
+                    elif selection == '3':
+                        obj = INFORMATION_GATHERING()
+                        cmdOutput = obj.testssl() #Start Testssl.sh scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
+                        os.chdir(home)
+
+                    elif selection == '4':
+                        obj = INFORMATION_GATHERING()
+                        cmdOutput = obj.whatweb() #Start WhatWeb scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
+                        os.chdir(home)
+
+                    elif selection == '5':
+                        obj = INFORMATION_GATHERING()
+                        cmdOutput = obj.whois() #Start WHOIS scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
+                        os.chdir(home)
+
+                    elif selection == '6':
+                        obj = INFORMATION_GATHERING()
+                        cmdOutput = obj.checkURL() #Start checkURL scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
+                        os.chdir(home)
+
+                    elif selection == '7':
+                        obj = INFORMATION_GATHERING()
+                        cmdOutput = obj.gobuster() #Start GoBuster scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
+                        os.chdir(home)
+
+                    else:
+                        os.chdir(home)
+                        invalidSelection(selected)
+
+                    for k in range(len(toolTags)):
+                        #scanHeaderHelper(toolTags[k])
+
+                        initialTags.append(toolTags[k])
+                        initialStr = "".join(initialTags)
+                headerTag.insert_after(BeautifulSoup(initialStr, 'html.parser'))
+                write(soup)
+            
+            os.chdir(home)
+
+        elif selected == '2':
+            print(colored('\nCurrent Target: '+url,
+                          attrs=['bold']))
+            print(colored('\n***Preparing VULNERABILITY Scans***','yellow',
+                          attrs=['bold','blink']))
+            print('1. Nikto - Open Source Vulnerability Scanner')
+            print('2. WPScan - Wordpress WebApp Vulnerability Scanner')
+            print('3. DotDotPwn - Directory Traversal Exploiter '+
+                  colored('(Warning: Likely Long Run Time)','red'))
+            print('4. SQLmap - Detect & Exploit SQL injection flaws')
+            print('5. Nuclei - Template Based Vulnerability Scanner')
+            print(colored('99. Go Back','red', attrs=['bold']))
+
+            print(colored("\n-- syntax: 1245 --", "yellow"))
+            selected = input('Choose an option to proceed: ').lower()
+
+            if selected == '99':
+                os.system('clear')
+                initial(validURL,url,outputFile)
+
+            else:
+                tools = {'1':'Nikto',
+                         '2':'WPScan',
+                         '3':'DotDotPwn',
+                         '4':'SQLMap',
+                         '5':'Nuclei'}
+
+                for selection in selected:
+                    divName = 'tool'+str(selection)
+                    if selection == '1':
+                        obj = VULNERABILITY() # call the class
+                        cmdOutput = obj.nikto() #Start Nikto Scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
+                        os.chdir(home)
+                    elif selection == '2':
+                        obj = VULNERABILITY() # call the class
+                        cmdOutput = obj.WPScan() #Start WPScan Scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
+                        os.chdir(home)
+
+                    elif selection == '3':
+                        obj = VULNERABILITY() # call the class
+                        cmdOutput = obj.dotdotpwn() #Start DotDotPwn Scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
+                        os.chdir(home)
+
+                    elif selection == '4':
+                        obj = VULNERABILITY() # call the class
+                        cmdOutput = obj.sqlmap() #Start SQLmap Scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
+                        os.chdir(home)
+
+                    elif selection == '5':
+                        obj = VULNERABILITY() # call the class
+                        cmdOutput = obj.nuclei() #Start Nuclei Scan
+                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
+                        os.chdir(home)
+
+                    else:
+                        os.chdir(home)
+                        invalidSelection(selected)
+
+                    for k in range(len(toolTags)):
+                        initialTags.append(toolTags[k])
+                        initialStr = "".join(initialTags)
+                headerTag.insert_after(BeautifulSoup(initialStr, 'html.parser'))
+                write(soup)
+            os.chdir(home)
+
+        elif selected == '3':
+            print(colored('\nCurrent Target: '+url,attrs=['bold']))
+            print(colored('\n***Preparing EXPLOIT Scans***','magenta',attrs=['bold','blink']))
+            print('1. Metasploit: WMAP - Web App Vuln. Scanner Conducted Within Metasploit framework')
+            print(colored('99. Go Back','red', attrs=['bold']))
+
+            print(colored("\n-- syntax: 1245 --", "yellow"))
+            selected = input('Choose an option to proceed: ')
+
+            if selected == '99':
+                os.system('clear')
+                initial(validURL,url,outputFile)
+
+            else:
+                for selection in selected:
+                    if selection == '1':
+                        obj = EXPLOITS() # call the class
+                        header("MSWmap")
+                        obj.MSWmap() #Start WMAP scan
+                        print('Metasploit: WMAP Successfully Executed')
+
+                    else:
+                        invalidSelection(selected)
+
+        elif selected == '0':
+            os.chdir(home)
+            changeTarget(validURL,url)
+
+        elif selected == '99':
+            os.chdir(home)
+            sys.exit(colored('\nTerminating KOMODO (╯°□°）╯︵ ┻━┻','red', attrs=['bold']))
+
+        else:
+            os.chdir(home)
+            invalidSelection(selected)
+
+
+
+def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
+    x = datetime.datetime.now()
+    current_time = "Scan Results: "+ str(x.strftime("%x %I:%M%p"))
+    initialTags =['\n','<button name="target" type="button" class="collapsible">'+current_time+'</button>','\n',
+                      '<div name="target" class="content">','<p>Please see scan results below.</p>','\n']
+    
+    while validURL == True:
+        global url
+        global outputFile
+        outputFile = outputFileTemp
+        fileName = fileNameTemp
+        url = urlTemp
+        os.chdir(home)
+>>>>>>> 5774d6c (removed wrong komodo version)
 
         # API tool selection
         text = colored('\n- - - - - APIs - - - - -','red', attrs=['bold'])
@@ -895,6 +1496,7 @@ def initial(validURL,url_temp,output_temp):
 
         selection = input('\nChoose a category to proceed: ')
         os.system('clear')
+<<<<<<< HEAD
         landing(selection,url,output)
 
 def validateURL(validURL, url_temp, output_temp):
@@ -902,6 +1504,19 @@ def validateURL(validURL, url_temp, output_temp):
     url = url_temp
     global output
     output = output_temp
+=======
+
+        landing(selection,url,fileName,outputFile,initialTags)
+        initialTags = []
+
+def validateURL(validURL, urlTemp):
+    global url
+    url = urlTemp
+
+    x = datetime.datetime.now()
+    current_time = "Scan Results: "+ str(x.strftime("%x %I:%M%p"))
+    current_time_adjusted = current_time.replace('/','-')
+>>>>>>> 5774d6c (removed wrong komodo version)
 
     #User input for URL Prefix and Target
     while validURL == False:
@@ -912,16 +1527,28 @@ def validateURL(validURL, url_temp, output_temp):
             #regular expression to replace all link issues i.e. / & . for html files
             rep = {"/": "-", ".com": "", ".": "-"} #define desired replacements here
 
+<<<<<<< HEAD
             #these three lines do the replacing
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
             output = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target)) + ".html"
+=======
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            #output = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target)) + current_time_adjusted+'.html'
+            fileName = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target))+'.html'
+>>>>>>> 5774d6c (removed wrong komodo version)
 
             url = 'https://'+str(target)
             validURL = True
 
             print(colored('\nCurrent Target: '+url,attrs=['bold']))
+<<<<<<< HEAD
             initial(validURL,url,output)
+=======
+            outputFile = createHTML(url,fileName)
+            initial(validURL,url,fileName,outputFile)
+>>>>>>> 5774d6c (removed wrong komodo version)
 
         elif selected == '2':
             target = input('('+colored('HTTP','yellow')+' Selected) Enter the target URL or IP Address: ')
@@ -929,20 +1556,38 @@ def validateURL(validURL, url_temp, output_temp):
             #regular expression to replace all link issues i.e. / & . for html files
             rep = {"/": "-", ".com": "", ".": "-"} #define desired replacements here
 
+<<<<<<< HEAD
             #these three lines do the replacing
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
             output = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target)) + ".html"
+=======
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            #output = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target)) + current_time_adjusted+'.html'
+            fileName = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target))+'.html'
+>>>>>>> 5774d6c (removed wrong komodo version)
 
             url = 'http://'+str(target)
             validURL = True
 
             print(colored('\nCurrent Target: '+url,attrs=['bold']))
+<<<<<<< HEAD
             initial(validURL,url,output)
         else:
             invalidSelection(selected)
 
 def validateIntent(validURL,url,output):
+=======
+
+            outputFile = createHTML(url,fileName)
+            initial(validURL,url,fileName,outputFile)
+        else:
+            invalidSelection(selected)
+
+
+def validateIntent(validURL,url):
+>>>>>>> 5774d6c (removed wrong komodo version)
     validIntent = False
     while validIntent == False:
         selected = input('\nEnter "1" for '+colored('Qualys Script Management','yellow')+' or "2" for '+colored('Penetration Testing','red')+': ')
@@ -951,6 +1596,7 @@ def validateIntent(validURL,url,output):
             validIntent = True
             obj = QUALYS()
             obj.qualysLanding()
+<<<<<<< HEAD
             validateIntent(validURL,url,output)
         elif selected == '2':
             os.system('clear')
@@ -962,6 +1608,20 @@ def changeTarget(validURL,url,output):
     os.system('clear')
     validURL = False
     validateURL(validURL,url,output)
+=======
+            validateIntent(validURL,url)
+        elif selected == '2':
+            validIntent = True
+            os.system('clear')
+            validateURL(validURL,url)
+        else:
+            invalidSelection(selected)
+
+def changeTarget(validURL,url):
+    os.system('clear')
+    validURL = False
+    validateURL(validURL,url)
+>>>>>>> 5774d6c (removed wrong komodo version)
 
 def invalidSelection(selected):
     os.system('clear')
@@ -972,13 +1632,20 @@ def main():
     print('Grabbing latest updates...')
     os.system('git pull')
     os.system('clear')
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5774d6c (removed wrong komodo version)
     #Print KOMODO Title
     print((('*' * 50) + '\n') * 3)
     tprint('    KOMODO')
     print((('*' * 50) + '\n') * 3)
 
     global url
+<<<<<<< HEAD
     global output
+=======
+>>>>>>> 5774d6c (removed wrong komodo version)
 
     os.system("echo 'NEW FEATURES ALERT!\nIntroducing... \n- Full BurpSuite REST API support!\n- Reworked Tool Selection!\n- Friendlier (and fancier) UI!' | lolcat")
 
@@ -987,7 +1654,11 @@ def main():
     validURL = False
 
     #Initial Screen
+<<<<<<< HEAD
     validateIntent(validURL,url,output)
+=======
+    validateIntent(validURL,url)
+>>>>>>> 5774d6c (removed wrong komodo version)
 
 if __name__ == '__main__':
     burp = BURPSUITE()
