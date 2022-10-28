@@ -588,10 +588,14 @@ class INFORMATION_GATHERING:
 
             cmd = str('whois '+ip+'| tee /dev/stderr | txt2html --extract')
             cmdOutput = pipeHelper(cmd)
+            
             ### OUTPUT MODIFICATION HERE
-
-            ### OUTPUT MODIFICATION HERE
-            return cmdOutput
+            rep = {"\\n": "<br>", "b'": "","'":"",'<br/>':"",'<a href':""} # define desired replacements here
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            
+            cmdOutputClean = pattern.sub(lambda m: rep[re.escape(m.group(0))], str(cmdOutput))
+            return cmdOutputClean
             print('WHOIS Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -682,7 +686,7 @@ def toolTagHelper(divName,tools,selection,cmdOutput,headerNumTemp):
 ##    toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
 ##                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','\n',newHeader]
     toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
-                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','</div>','\n',]
+                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','</div>','\n']
     return toolTags
 
 def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
@@ -909,7 +913,6 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
         else:
             os.chdir(home)
             invalidSelection(selected)
-
 
 
 def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
