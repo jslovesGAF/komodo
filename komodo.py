@@ -1220,21 +1220,12 @@ def createHTML(url,fileName):
 def toolTagHelper(divName,tools,selection,cmdOutput,headerNumTemp):
     headerNum = headerNumTemp+1
     newHeader = '<h'+str(headerNum)+'>'
+##    toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
+##                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','\n',newHeader]
     toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
-                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','\n',newHeader]
-    #toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
-                #'\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','</div>','\n',]
+                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','</div>','\n',]
     return toolTags
 
-##def scanHeaderHelper(tags):
-##
-##
-##    return initialTags
-
-##def landingHelper(url,outputFileTemp)
-##    outputFile = createHTML(url,outputFileTemp)
-##    os.chdir(home)
-##    return outputFile
 
 def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
     global url
