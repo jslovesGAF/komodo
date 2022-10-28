@@ -5,12 +5,11 @@
 ####### SAMPLE TARGET scanme.nmap.org
 #######
 
-import os, warnings, sys, re, datetime, socket, subprocess, urllib.request, json, requests, time
+import os, warnings, sys, re, datetime, socket, subprocess, urllib.request, json, requests, time, subprocess
 from termcolor import colored, cprint
 from art import *
 from Wappalyzer import Wappalyzer, WebPage
 from bs4 import BeautifulSoup
-import subprocess
 
 key = ""
 configType = "None"
@@ -380,18 +379,20 @@ class VULNERABILITY:
     def __init__(self):
         self.url = url
 
-
     # Open Source Vulnerability Scanner
     def nikto(self):
         global url
         global output
         url = self.url
-        output = self.output
 
         try:
             print('Lauching Nikto Vulnerability Scanner on {}'.format(self.url))
-            cmd = str('nikto -h {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file} '.format(url=self.url,file=self.output))
-            os.system(cmd)
+            cmd = str('nikto -h {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file} '.format(url=self.url))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+            ### OUTPUT MODIFICATION HERE
+            return cmdOutput
             print('Nikto Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -399,17 +400,12 @@ class VULNERABILITY:
     # Wordpress WebApp Vulnerability Scanner
     def WPScan(self):
         global url
-
         url = self.url
-
-
         try:
             print('Running WPScan Against {}'.format(self.url))
             cmd = str('wpscan --url {url} --no-update --no-banner | tee /dev/stderr | txt2html -extract'.format(url=self.url))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
-
-
 
             ### OUTPUT MODIFICATION HERE
             return cmdOutput
@@ -422,10 +418,8 @@ class VULNERABILITY:
         global url
         global output
         url = self.url
-        output = self.output
-
         orig = str(self.url)
-
+        
         try:
             if 'https://' in orig:
                 new = orig.replace('https://',"",1)
@@ -433,36 +427,48 @@ class VULNERABILITY:
                 new = orig.replace('http://',"",1)
 
             print('Running DotDotPwn Against {}'.format(new))
-            cmd = str('dotdotpwn -m http -h {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
-            os.system(cmd)
+            cmd = str('dotdotpwn -m http -h {url} | tee /dev/stderr | txt2html -extract'.format(url=new))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+            ### OUTPUT MODIFICATION HERE
+            return cmdOutput
             print('DotDotPwn Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
+    # SQL Injection
     def sqlmap(self):
         global url
         global output
         url = self.url
-        output = self.output
 
         try:
             print('Running SQLmap Against {}'.format(self.url))
-            cmd = str('sqlmap {url} --disable-coloring | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url,file=self.output))
-            os.system(cmd)
+            cmd = str('sqlmap {url} --disable-coloring | tee /dev/stderr | txt2html -extract'.format(url=self.url))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+            ### OUTPUT MODIFICATION HERE
+            return cmdOutput
             print('SQLmap Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
+    # Vuln Scanner
     def nuclei(self):
         global url
         global output
         url = self.url
-        output = self.output
 
         try:
             print('Running Nuclei Against {}'.format(self.url))
-            cmd = str('nuclei -u {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=self.url,file=self.output))
-            os.system(cmd)
+            cmd = str('nuclei -u {url} | tee /dev/stderr | txt2html -extract'.format(url=self.url))
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+            ### OUTPUT MODIFICATION HERE
+            return cmdOutput
             print('Nuclei Successfully Executed')
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -475,8 +481,7 @@ class INFORMATION_GATHERING:
     def nmap(self):
         global url
         url = self.url
-
-
+        
         try:
             print("Launching aggressive NMAP Scan\n")
             orig = str(self.url)
@@ -486,13 +491,9 @@ class INFORMATION_GATHERING:
             elif 'http://' in orig:
                 new = orig.replace('http://',"",1)
 
-            #cmd = str('nmap -v -A -T5 {url} --stats-every 30m| tee /dev/stderr | txt2html -extract -8 >> html/{file}'.format(url=new, file=output))
-
             cmd = str('nmap -v -A -T5 {url} --stats-every 30m | tee /dev/stderr | txt2html --extract'.format(url=new))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
-
-
 
             ### OUTPUT MODIFICATION HERE
             print('Nmap Successfully Executed')
@@ -500,13 +501,11 @@ class INFORMATION_GATHERING:
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
-
-    # Network Mapper
+    # Packet tracing
     def traceroute(self):
         global url
         url = self.url
-
-
+        
         try:
             print("Launching Traceroute Scan\n")
             orig = str(self.url)
@@ -524,7 +523,6 @@ class INFORMATION_GATHERING:
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
             cmdOutputClean = pattern.sub(lambda m: rep[re.escape(m.group(0))], str(cmdOutput))
-            ### OUTPUT MODIFICATION HERE
 
             return cmdOutputClean
             print('Traceroute Successfully Executed')
@@ -535,8 +533,7 @@ class INFORMATION_GATHERING:
     def testssl(self):
         global url
         url = self.url
-
-
+        
         try:
             print("Launching TestSSL Scan\n")
             os.chdir(home+'/testssl.sh')
@@ -544,8 +541,6 @@ class INFORMATION_GATHERING:
             cmd = str('./testssl.sh -s -p -h --vulnerabilities {url} | tee /dev/stderr | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
-
-
 
             ### OUTPUT MODIFICATION HERE
             os.chdir(home)
@@ -560,15 +555,12 @@ class INFORMATION_GATHERING:
         global url
         url = self.url
 
-
         try:
             print("Launching WhatWeb Scan\n")
-
+            
             cmd = str('whatweb {url} --color=never | tee /dev/stderr | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
-
-
 
             ### OUTPUT MODIFICATION HERE
             return cmdOutput
@@ -582,7 +574,6 @@ class INFORMATION_GATHERING:
         global url
         url = self.url
         orig = str(self.url)
-
 
         try:
             print("Launching WHOIS Scan\n")
@@ -598,8 +589,6 @@ class INFORMATION_GATHERING:
             cmd = str('whois '+ip+'| tee /dev/stderr | txt2html --extract')
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
-
-
 
             ### OUTPUT MODIFICATION HERE
             return cmdOutput
@@ -636,7 +625,6 @@ class INFORMATION_GATHERING:
     def gobuster(self):
         global url
         url = self.url
-
 
         try:
             print("Launching GoBuster Scan\n")
@@ -689,23 +677,13 @@ def createHTML(url,fileName):
         return outputFile
 
 def toolTagHelper(divName,tools,selection,cmdOutput,headerNumTemp):
-    headerNum = headerNumTemp+1
-    newHeader = '<h'+str(headerNum)+'>'
+##    headerNum = headerNumTemp+1
+##    newHeader = '<h'+str(headerNum)+'>'
 ##    toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
 ##                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','\n',newHeader]
     toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
                 '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','</div>','\n',]
     return toolTags
-
-##def scanHeaderHelper(tags):
-##
-##
-##    return initialTags
-
-##def landingHelper(url,outputFileTemp)
-##    outputFile = createHTML(url,outputFileTemp)
-##    os.chdir(home)
-##    return outputFile
 
 def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
     global url
