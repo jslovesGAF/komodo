@@ -265,116 +265,116 @@ class BURPSUITE():
         else:
             burp.burpSelections()
 
-##class QUALYS:
-##    def qualysLanding(self):
-##        print(colored('\n1. "Run Monday"','white',attrs=['bold']))
-##        print(colored('2. "Run Friday"','white',attrs=['bold']))
-##        print(colored('3. Create New Sets','green', attrs=['bold']))
-##        print(colored('99. Go Back','red', attrs=['bold']))
-##
-##        selected = input('Choose an option to proceed: ')
-##        try:
-##            #Run Monday Script
-##            if selected == "1":
-##                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
-##                os.system('sh run_monday')
-##
-##            #Run Friday Script
-##            elif selected == "2":
-##                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
-##                os.system('sh run_friday')
-##
-##            #Create New Sets & Delete Old
-##            elif selected == "3":
-##                if len(os.listdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')) == 0:
-##                    print("Directory is empty")
-##                else:
-##                    os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/*')
-##
-##                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
-##
-##                os.system('sh create_set1')
-##                os.system('sh create_set2')
-##
-##                os.system('cp -a /home/kali/Desktop/Qualys\ Scripts/Test/. /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/')
-##                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')
-##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set1')
-##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set2')
-##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file1.txt')
-##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file2.txt')
-##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/README.txt')
-##                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/update_test.xml')
-##
-##                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
-##                for file in os.listdir('/home/kali/Desktop/Qualys Scripts/Test/'):
-##                    if file.startswith("update1_") or file.startswith("update2_"):
-##                        command = 'rm '+str(file)
-##                        os.system(command)
-##
-##            elif selected == '99':
-##                os.system('clear')
-##
-##            else:
-##                invalidSelection(selected)
-##                obj = QUALYS
-##                obj.qualysLanding(self)
-##        except:
-##               print(colored('Error. Is the directory on your desktop?\n','red',attrs=['bold']))
-##
-##def wappalyzer():
-##    global output
-##    global url
-##
-##    try:
-##        os.chdir('html')
-##        with open(output, "a") as f:
-##            webpage = WebPage.new_from_url(url)
-##            warnings.filterwarnings('ignore', message="""Caught 'unbalanced parenthesis at position 119' compiling regex""", category=UserWarning )
-##
-##            wappalyzer = Wappalyzer.latest()
-##            print(wappalyzer.analyze_with_versions_and_categories(webpage))
-##
-##            f.write(str(wappalyzer.analyze_with_versions_and_categories(webpage)))
-##            print('Running Wappalyzer technology detector on {}'.format(url))
-##            f.close()
-##        os.chdir(home)
-##        print('Wappalyzer Successfully Executed')
-##
-##    except:
-##        os.chdir(home)
-##        print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-##
-######################################### END OF API SECTION #######################################
-######################################### BEGINNING OF TOOL SECTION #######################################
-##
-##class EXPLOITS:
-##    def __init__(self):
-##        self.url = url
-##        self.output = output
-##
-##    def MSWmap(self):
-##        global url
-##        global output
-##        url = self.url
-##        orig = str(self.url)
-##        output = self.output
-##
-##        try:
-##            print('Lauching WMAP Scanner through Metasploit on {}'.format(self.url))
-##            #regular expression to replace all link issues i.e. / & .
-##            rep = {"https://": "", "http://": ""} #define desired replacements here
-##
-##            #these three lines do the replacing
-##            rep = dict((re.escape(k), v) for k, v in rep.items())
-##            pattern = re.compile("|".join(rep.keys()))
-##            new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], orig))
-##            ip = socket.gethostbyname(new)
-##
-##            cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/komodo/fav_modules;exit'+"'"+"| tee /dev/stderr | txt2html -extract -8 >> html/{file}".format(file=output))
-##            os.system(cmd)
-##        except:
-##            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-##
+class QUALYS:
+    def qualysLanding(self):
+        print(colored('\n1. "Run Monday"','white',attrs=['bold']))
+        print(colored('2. "Run Friday"','white',attrs=['bold']))
+        print(colored('3. Create New Sets','green', attrs=['bold']))
+        print(colored('99. Go Back','red', attrs=['bold']))
+
+        selected = input('Choose an option to proceed: ')
+        try:
+            #Run Monday Script
+            if selected == "1":
+                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+                os.system('sh run_monday')
+
+            #Run Friday Script
+            elif selected == "2":
+                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+                os.system('sh run_friday')
+
+            #Create New Sets & Delete Old
+            elif selected == "3":
+                if len(os.listdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')) == 0:
+                    print("Directory is empty")
+                else:
+                    os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/*')
+
+                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+
+                os.system('sh create_set1')
+                os.system('sh create_set2')
+
+                os.system('cp -a /home/kali/Desktop/Qualys\ Scripts/Test/. /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/')
+                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set1')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set2')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file1.txt')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file2.txt')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/README.txt')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/update_test.xml')
+
+                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+                for file in os.listdir('/home/kali/Desktop/Qualys Scripts/Test/'):
+                    if file.startswith("update1_") or file.startswith("update2_"):
+                        command = 'rm '+str(file)
+                        os.system(command)
+
+            elif selected == '99':
+                os.system('clear')
+
+            else:
+                invalidSelection(selected)
+                obj = QUALYS
+                obj.qualysLanding(self)
+        except:
+               print(colored('Error. Is the directory on your desktop?\n','red',attrs=['bold']))
+
+def wappalyzer():
+    global output
+    global url
+
+    try:
+        os.chdir('html')
+        with open(output, "a") as f:
+            webpage = WebPage.new_from_url(url)
+            warnings.filterwarnings('ignore', message="""Caught 'unbalanced parenthesis at position 119' compiling regex""", category=UserWarning )
+
+            wappalyzer = Wappalyzer.latest()
+            print(wappalyzer.analyze_with_versions_and_categories(webpage))
+
+            f.write(str(wappalyzer.analyze_with_versions_and_categories(webpage)))
+            print('Running Wappalyzer technology detector on {}'.format(url))
+            f.close()
+        os.chdir(home)
+        print('Wappalyzer Successfully Executed')
+
+    except:
+        os.chdir(home)
+        print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+
+####################################### END OF API SECTION #######################################
+####################################### BEGINNING OF TOOL SECTION #######################################
+
+class EXPLOITS:
+    def __init__(self):
+        self.url = url
+        self.output = output
+
+    def MSWmap(self):
+        global url
+        global output
+        url = self.url
+        orig = str(self.url)
+        output = self.output
+
+        try:
+            print('Lauching WMAP Scanner through Metasploit on {}'.format(self.url))
+            #regular expression to replace all link issues i.e. / & .
+            rep = {"https://": "", "http://": ""} #define desired replacements here
+
+            #these three lines do the replacing
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], orig))
+            ip = socket.gethostbyname(new)
+
+            cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/komodo/fav_modules;exit'+"'"+"| tee /dev/stderr | txt2html -extract -8 >> html/{file}".format(file=output))
+            os.system(cmd)
+        except:
+            print(colored('Whoops! Something went wrong. Please try again.', 'red',))
+
 class VULNERABILITY:
     def __init__(self):
         self.url = url
@@ -493,11 +493,16 @@ class INFORMATION_GATHERING:
 
             cmd = str('nmap -v -A -T5 {url} --stats-every 30m | tee /dev/stderr | txt2html --extract'.format(url=new))
             cmdOutput = pipeHelper(cmd)
+            
             ### OUTPUT MODIFICATION HERE
+            rep = {"\\n": "<br>", "b'": "","'":""} # define desired replacements here
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            cmdOutputClean = pattern.sub(lambda m: rep[re.escape(m.group(0))], str(cmdOutput))
 
-            ### OUTPUT MODIFICATION HERE
             print('Nmap Successfully Executed')
-            return cmdOutput
+            return cmdOutputClean
+
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -524,8 +529,9 @@ class INFORMATION_GATHERING:
             pattern = re.compile("|".join(rep.keys()))
             cmdOutputClean = pattern.sub(lambda m: rep[re.escape(m.group(0))], str(cmdOutput))
 
-            return cmdOutputClean
             print('Traceroute Successfully Executed')
+            return cmdOutputClean
+    
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -538,14 +544,17 @@ class INFORMATION_GATHERING:
             print("Launching TestSSL Scan\n")
             os.chdir(home+'/testssl.sh')
 
-            cmd = str('./testssl.sh -s -p -h --vulnerabilities {url} | tee /dev/stderr | txt2html --extract'.format(url=url))
+            cmd = str('./testssl.sh -s -p -h --quiet --color 0 --vulnerabilities {url} | tee /dev/stderr | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
-            ### OUTPUT MODIFICATION HERE
 
             ### OUTPUT MODIFICATION HERE
-            os.chdir(home)
-            return cmdOutput
+            rep = {"\\n": "<br>", "b'": "","'":""} # define desired replacements here
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            cmdOutputClean = pattern.sub(lambda m: rep[re.escape(m.group(0))], str(cmdOutput))
+
             print('TestSSL Successfully Executed')
+            return cmdOutputClean
         except:
             os.chdir(home)
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -558,13 +567,18 @@ class INFORMATION_GATHERING:
         try:
             print("Launching WhatWeb Scan\n")
             
-            cmd = str('whatweb {url} --color=never | tee /dev/stderr | txt2html --extract'.format(url=url))
+            cmd = str('whatweb {url} --log-json=FILE --color=never | tee /dev/stderr | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
+            
             ### OUTPUT MODIFICATION HERE
-
-            ### OUTPUT MODIFICATION HERE
-            return cmdOutput
+            rep = {"\\n": "<br>", "b'": "","'":""} # define desired replacements here
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            
+            cmdOutputCleanTemp = pattern.sub(lambda m: rep[re.escape(m.group(0))], str(cmdOutput))            
+            cmdOutputClean = str(cmdOutputCleanTemp.replace(", ","<br>"))
             print('WhatWeb Successfully Executed')
+            return cmdOutputClean
         except:
 
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
@@ -636,13 +650,13 @@ class INFORMATION_GATHERING:
             cmd = str('gobuster dir -u {url} -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -q | tee /dev/stderr | txt2html -extract'.format(url=self.url))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
+            rep = {"\\n": "<br>", "b'": "","'":""} # define desired replacements here
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            cmdOutputClean = pattern.sub(lambda m: rep[re.escape(m.group(0))], str(cmdOutput))
 
-
-
-            ### OUTPUT MODIFICATION HERE
-            os.chdir(home)
-            return cmdOutput
-            print('WhatWeb Successfully Executed')
+            print('GoBuster Successfully Executed')
+            return cmdOutputClean
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -740,7 +754,7 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
 
             if selected == '99':
                 os.system('clear')
-                initial(validURL,url,outputFile)
+                initial(validURL,url,fileName,outputFile)
 
             else:
                 tools = {'1':'NMAP',
@@ -827,7 +841,7 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
 
             if selected == '99':
                 os.system('clear')
-                initial(validURL,url,outputFile)
+                initial(validURL,url,fileName,outputFile)
 
             else:
                 tools = {'1':'Nikto',
@@ -889,7 +903,7 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
 
             if selected == '99':
                 os.system('clear')
-                initial(validURL,url,outputFile)
+                initial(validURL,url,fileName,outputFile)
 
             else:
                 for selection in selected:
