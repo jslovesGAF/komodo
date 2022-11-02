@@ -17,22 +17,24 @@ sudo pip install termcolor
 sudo pip install lolcat
 
 #testssl 
+cd misc
 git clone --depth 1 https://github.com/drwetter/testssl.sh.git
+cd ..
 
 #Dotdotpwn 
 sudo apt install dotdotpwn
 
-#Dotdotpwn 
+#Nuclei
 sudo apt install nuclei
 nuclei
 
 #CheckURL
+cd misc
 git clone https://github.com/UndeadSec/checkURL.git
+cd ..
 
 #Gobuster
 sudo apt install gobuster
-
-cd ..
 
 #Wmap Database Connect
 #Start PostgreSQL Service
