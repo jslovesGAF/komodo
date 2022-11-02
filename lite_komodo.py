@@ -1,9 +1,8 @@
 # KOMODO All-in-one Hacking Tool
-# Joshua Sloves / Ethan Tomford
+# Primary Author: Joshua Sloves
 
 ####### SAMPLE TARGET google-gruyere.appspot.com/593948396113602183495718301495133174940
 ####### SAMPLE TARGET scanme.nmap.org
-#######
 
 import os, warnings, sys, re, datetime, socket, subprocess, urllib.request, json, requests, time, subprocess
 from termcolor import colored, cprint
@@ -294,14 +293,12 @@ def wappalyzer():
 class EXPLOITS:
     def __init__(self):
         self.url = url
-        self.output = output
 
     def MSWmap(self):
         global url
         global output
-        url = self.url
-        orig = str(self.url)
-        output = self.output
+        url = str(self.url)
+        #orig = str(self.url)
 
         try:
             print('Lauching WMAP Scanner through Metasploit on {}'.format(self.url))
@@ -311,11 +308,15 @@ class EXPLOITS:
             #these three lines do the replacing
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
-            new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], orig))
+            new = (pattern.sub(lambda m: rep[re.escape(m.group(0))], url))
             ip = socket.gethostbyname(new)
 
-            cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/komodo/fav_modules;exit'+"'"+"| tee /dev/stderr | txt2html -extract -8 >> html/{file}".format(file=output))
-            os.system(cmd)
+            cmd = str('msfconsole -q -p wmap -x '+"'"+'wmap_sites -d 0;wmap_targets -c;wmap_sites -a '+ip+';wmap_targets -d 0;wmap_run -p /home/kali/komodo/fav_modules;exit'+"'"+"| tee /dev/stderr | txt2html -extract ")
+            cmdOutput = pipeHelper(cmd)
+            ### OUTPUT MODIFICATION HERE
+
+            ### OUTPUT MODIFICATION HERE
+            return cmdOutput
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -326,18 +327,18 @@ class VULNERABILITY:
     # Open Source Vulnerability Scanner
     def nikto(self):
         global url
-        global output
         url = self.url
 
         try:
-            print('Lauching Nikto Vulnerability Scanner on {}'.format(self.url))
-            cmd = str('nikto -h {url} | tee /dev/stderr | txt2html -extract -8 >> html/{file} '.format(url=self.url))
+            print('Lauching Nikto Vulnerability Scanner on {}'.format(url))
+            cmd = str('nikto -h {url} | tee /dev/stderr | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
 
             ### OUTPUT MODIFICATION HERE
-            return cmdOutput
+            
             print('Nikto Successfully Executed')
+            return cmdOutput
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -345,22 +346,24 @@ class VULNERABILITY:
     def WPScan(self):
         global url
         url = self.url
+
         try:
-            print('Running WPScan Against {}'.format(self.url))
-            cmd = str('wpscan --url {url} --no-update --no-banner | tee /dev/stderr | txt2html -extract'.format(url=self.url))
+            print('Running WPScan Against {}'.format(url))
+            cmd = str('wpscan --url {url} --no-update --no-banner | tee /dev/stderr | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
 
             ### OUTPUT MODIFICATION HERE
-            return cmdOutput
+            
             print('WPScan Successfully Executed')
+            return cmdOutput
+
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
     # Directory Traversal Exploiter
     def dotdotpwn(self):
         global url
-        global output
         url = self.url
         orig = str(self.url)
         
@@ -371,13 +374,15 @@ class VULNERABILITY:
                 new = orig.replace('http://',"",1)
 
             print('Running DotDotPwn Against {}'.format(new))
-            cmd = str('dotdotpwn -m http -h {url} | tee /dev/stderr | txt2html -extract'.format(url=new))
+            os.system(home)
+            cmd = str('dotdotpwn -m http -h {url} -t 100 -X | tee /dev/stderr | txt2html --extract'.format(url=new))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
 
             ### OUTPUT MODIFICATION HERE
-            return cmdOutput
             print('DotDotPwn Successfully Executed')
+            return cmdOutput
+
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -388,14 +393,15 @@ class VULNERABILITY:
         url = self.url
 
         try:
-            print('Running SQLmap Against {}'.format(self.url))
-            cmd = str('sqlmap {url} --disable-coloring | tee /dev/stderr | txt2html -extract'.format(url=self.url))
+            print('Running SQLmap Against {}'.format(url))
+            cmd = str('sqlmap {url} --disable-coloring | tee /dev/stderr | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
 
             ### OUTPUT MODIFICATION HERE
-            return cmdOutput
             print('SQLmap Successfully Executed')
+            return cmdOutput
+
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -406,14 +412,15 @@ class VULNERABILITY:
         url = self.url
 
         try:
-            print('Running Nuclei Against {}'.format(self.url))
-            cmd = str('nuclei -u {url} | tee /dev/stderr | txt2html -extract'.format(url=self.url))
+            print('Running Nuclei Against {}'.format(url))
+            cmd = str('nuclei -u {url} | tee /dev/stderr | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
             ### OUTPUT MODIFICATION HERE
 
             ### OUTPUT MODIFICATION HERE
-            return cmdOutput
             print('Nuclei Successfully Executed')
+            return cmdOutput
+
         except:
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
 
@@ -486,9 +493,9 @@ class INFORMATION_GATHERING:
         
         try:
             print("Launching TestSSL Scan\n")
-            os.chdir(home+'/testssl.sh')
+            os.chdir(home+'/misc/testssl.sh')
 
-            cmd = str('./testssl.sh -s -p -h --quiet --color 0 --vulnerabilities {url} | tee /dev/stderr | txt2html --extract'.format(url=url))
+            cmd = str('./testssl.sh -s -p -h --quiet --color 0 --vulnerabilities {url} | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
 
             ### OUTPUT MODIFICATION HERE
@@ -511,7 +518,7 @@ class INFORMATION_GATHERING:
         try:
             print("Launching WhatWeb Scan\n")
             
-            cmd = str('whatweb {url} --log-json=FILE --color=never | tee /dev/stderr | txt2html --extract'.format(url=url))
+            cmd = str('whatweb {url} --log-json=FILE --color=never | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
             
             ### OUTPUT MODIFICATION HERE
@@ -565,7 +572,7 @@ class INFORMATION_GATHERING:
 
         try:
             print("Launching CheckURL Scan\n")
-            os.chdir(home+'/checkURL')
+            os.chdir(home+'/misc/checkURL')
 
             cmd = str('python checkURL.py --url {url} | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
@@ -623,9 +630,6 @@ def createHTML(url,fileName):
     outputFile = fileName
 
     if os.path.isfile(fileName):
-        with open(fileName, 'r') as f:
-            #outputFile = f.read()
-            print('File exists.')
         os.chdir(home)
         return outputFile
     else:
@@ -638,13 +642,9 @@ def createHTML(url,fileName):
         os.chdir(home)
         return outputFile
 
-def toolTagHelper(divName,tools,selection,cmdOutput,headerNumTemp):
-##    headerNum = headerNumTemp+1
-##    newHeader = '<h'+str(headerNum)+'>'
-##    toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
-##                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','<br>','\n',newHeader]
+def toolTagHelper(divName,tools,selection,cmdOutput):
     toolTags = ['\n','<button name='+divName+' type="button" class="collapsible">'+tools[selection]+'</button>',
-                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','</div>','\n']
+                '\n','<div name ='+divName+' class="content"><p>'+str(cmdOutput)+'</p>','</div>','\n','<br></br>']
     return toolTags
 
 def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
@@ -665,20 +665,18 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
         contents = f.read()
         soup = BeautifulSoup(contents, 'html.parser')
         divName = 'tool0'
+        headerTag = soup.find('h1')
 
-        headerList = soup.find_all(re.compile('^h[1-6]$'))
-        headerStr = str(headerList.pop())
-        headerStr = headerStr[1:3]
-        headerNum = int(headerStr[1:2])
-        headerTag = soup.find(headerStr)
-
+        # call Burp class
         if selected.lower() == 'b':
             burp.burpLanding()
-
+            
+        # call Wappalyer class
         elif selected.lower() == 'w':
             header("wappalyzer")
             wappalyzer()
-
+            
+        # Information Gathering
         if selected == '1':
             print(colored('\nCurrent Target: '+url,
                           attrs=['bold']))
@@ -696,6 +694,9 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
             print(colored("-- syntax: 1245 --\n", "yellow"))
             selected = input('Choose an option to proceed: ')
 
+            obj = INFORMATION_GATHERING()
+            
+            # "Go back" - return to initial
             if selected == '99':
                 os.system('clear')
                 initial(validURL,url,fileName,outputFile)
@@ -710,63 +711,42 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
                          '7':'GoBuster'}
 
                 for selection in selected:
-                    divName = 'tool'+str(selection)
+                    divName = 'tool'+str(selection) # names for HTML buttons
                     if selection == '1':
-                        obj = INFORMATION_GATHERING()
-                        cmdOutput = obj.nmap() #Start NMAP scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
-                        os.chdir(home)
+                        cmdOutput = obj.nmap() # start NMAP scan
 
                     elif selection == '2':
-                        obj = INFORMATION_GATHERING()
-                        cmdOutput = obj.traceroute() #Start Traceroute scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
-                        os.chdir(home)
+                        cmdOutput = obj.traceroute() # start Traceroute scan
 
                     elif selection == '3':
-                        obj = INFORMATION_GATHERING()
-                        cmdOutput = obj.testssl() #Start Testssl.sh scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
-                        os.chdir(home)
+                        cmdOutput = obj.testssl() # start Testssl.sh scan
 
                     elif selection == '4':
-                        obj = INFORMATION_GATHERING()
-                        cmdOutput = obj.whatweb() #Start WhatWeb scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
-                        os.chdir(home)
+                        cmdOutput = obj.whatweb() # start WhatWeb scan
 
                     elif selection == '5':
-                        obj = INFORMATION_GATHERING()
-                        cmdOutput = obj.whois() #Start WHOIS scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
-                        os.chdir(home)
+                        cmdOutput = obj.whois() #s tart WHOIS scan
 
                     elif selection == '6':
-                        obj = INFORMATION_GATHERING()
-                        cmdOutput = obj.checkURL() #Start checkURL scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
-                        os.chdir(home)
+                        cmdOutput = obj.checkURL() # start checkURL scan
 
                     elif selection == '7':
-                        obj = INFORMATION_GATHERING()
-                        cmdOutput = obj.gobuster() #Start GoBuster scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
-                        os.chdir(home)
+                        cmdOutput = obj.gobuster() # start GoBuster scan
 
                     else:
                         os.chdir(home)
-                        invalidSelection(selected)
+                        invalidSelection(selected) # Call invalid selection
 
+                    toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
                     for k in range(len(toolTags)):
-                        #scanHeaderHelper(toolTags[k])
-
                         initialTags.append(toolTags[k])
                         initialStr = "".join(initialTags)
+                    os.chdir(home)
+                # append Tool outputs to parent button
                 headerTag.insert_after(BeautifulSoup(initialStr, 'html.parser'))
                 write(soup)
             
-            os.chdir(home)
-
+        # Vulnerability 
         elif selected == '2':
             print(colored('\nCurrent Target: '+url,
                           attrs=['bold']))
@@ -782,7 +762,10 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
 
             print(colored("\n-- syntax: 1245 --", "yellow"))
             selected = input('Choose an option to proceed: ').lower()
+            
+            obj = VULNERABILITY()
 
+            # "Go back" - return to initial
             if selected == '99':
                 os.system('clear')
                 initial(validURL,url,fileName,outputFile)
@@ -797,45 +780,34 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
                 for selection in selected:
                     divName = 'tool'+str(selection)
                     if selection == '1':
-                        obj = VULNERABILITY() # call the class
                         cmdOutput = obj.nikto() #Start Nikto Scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
-                        os.chdir(home)
+                        
                     elif selection == '2':
-                        obj = VULNERABILITY() # call the class
-                        cmdOutput = obj.WPScan() #Start WPScan Scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput,headerNum)
-                        os.chdir(home)
+                        cmdOutput = obj.WPScan() #Start WPScan ScanerNum)
 
                     elif selection == '3':
-                        obj = VULNERABILITY() # call the class
                         cmdOutput = obj.dotdotpwn() #Start DotDotPwn Scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
-                        os.chdir(home)
 
                     elif selection == '4':
-                        obj = VULNERABILITY() # call the class
                         cmdOutput = obj.sqlmap() #Start SQLmap Scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
-                        os.chdir(home)
 
                     elif selection == '5':
-                        obj = VULNERABILITY() # call the class
                         cmdOutput = obj.nuclei() #Start Nuclei Scan
-                        toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
-                        os.chdir(home)
 
                     else:
                         os.chdir(home)
                         invalidSelection(selected)
 
+                    toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
                     for k in range(len(toolTags)):
                         initialTags.append(toolTags[k])
                         initialStr = "".join(initialTags)
+                    os.chdir(home)
+                # append Tool outputs to parent button
                 headerTag.insert_after(BeautifulSoup(initialStr, 'html.parser'))
                 write(soup)
-            os.chdir(home)
-
+            
+        # Exploit
         elif selected == '3':
             print(colored('\nCurrent Target: '+url,attrs=['bold']))
             print(colored('\n***Preparing EXPLOIT Scans***','magenta',attrs=['bold','blink']))
@@ -844,48 +816,54 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
 
             print(colored("\n-- syntax: 1245 --", "yellow"))
             selected = input('Choose an option to proceed: ')
-
+            
+            obj = EXPLOITS()
+            
+            # "Go back" - return to initial
             if selected == '99':
                 os.system('clear')
                 initial(validURL,url,fileName,outputFile)
 
             else:
+                tools = {'1':'MSWmap'
+                         }
+                
                 for selection in selected:
+                    divName = 'tool'+str(selection)
                     if selection == '1':
-                        obj = EXPLOITS() # call the class
-                        header("MSWmap")
-                        obj.MSWmap() #Start WMAP scan
+                        cmdOutput = obj.MSWmap() #Start WMAP scan
                         print('Metasploit: WMAP Successfully Executed')
 
                     else:
+                        os.chdir(home)
                         invalidSelection(selected)
-
-        elif selected == '0':
-            os.chdir(home)
-            changeTarget(validURL,url)
-
-        elif selected == '99':
-            os.chdir(home)
-            sys.exit(colored('\nTerminating KOMODO (╯°□°）╯︵ ┻━┻','red', attrs=['bold']))
-
+                        
+                    toolTags = toolTagHelper(divName,tools,selection,cmdOutput)
+                    for k in range(len(toolTags)):
+                        initialTags.append(toolTags[k])
+                        initialStr = "".join(initialTags)
+                    os.chdir(home)
+                # append Tool outputs to parent button
+                headerTag.insert_after(BeautifulSoup(initialStr, 'html.parser'))
+                write(soup)
+                
+        # Invalid selection
         else:
-            os.chdir(home)
-            invalidSelection(selected)
-
+            invalidSelection(selection) 
 
 def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
     x = datetime.datetime.now()
-    current_time = "Scan Results: "+ str(x.strftime("%x %I:%M%p"))
-    initialTags =['\n','<button name="target" type="button" class="collapsible">'+current_time+'</button>','\n',
-                      '<div name="target" class="content">','<p>Please see scan results below.</p>','\n']
-    
+
     while validURL == True:
         global url
         global outputFile
+        
         outputFile = outputFileTemp
         fileName = fileNameTemp
         url = urlTemp
         os.chdir(home)
+
+        initialTags = []
 
         # API tool selection
         text = colored('\n- - - - - APIs - - - - -','red', attrs=['bold'])
@@ -900,14 +878,45 @@ def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
         print(colored('2. Vulnerability','white'))
         print(colored('3. Exploits','white'))
 
+        # other options
         print(colored('\n0. Change Target', 'red', attrs=['bold']))
         print(colored('99. Exit', 'red', attrs=['bold']))
 
         selection = input('\nChoose a category to proceed: ')
         os.system('clear')
-
+        
+        # parent button for Information Gathering
+        if selection == '1':
+            current_time = "Information Gathering - Scan Results from "+ str(x.strftime("%x %I:%M%p"))
+            initialTags =['<button name="target" type="button" class="collapsible">'+current_time+'</button>','\n',
+                          '<div name="target" class="content">','<p>Please see scan results below.</p>']     
+        # parent button for Vulnerability
+        elif selection == '2':
+            current_time = "Vulnerability - Scan Results from "+ str(x.strftime("%x %I:%M%p"))
+            initialTags =['<button name="target" type="button" class="collapsible">'+current_time+'</button>','\n',
+                          '<div name="target" class="content">','<p>Please see scan results below.</p>']
+        # parent button for Exploit
+        elif selection == '3':
+            current_time = "Exploit Tools - SScan Results from "+ str(x.strftime("%x %I:%M%p"))
+            initialTags =['<button name="target" type="button" class="collapsible">'+current_time+'</button>','\n',
+                          '<div name="target" class="content">','<p>Please see scan results below.</p>']
+        # change Target      
+        elif selection == '0':
+            os.chdir(home)
+            changeTarget(validURL,url)
+        # exit Komodo
+        elif selection == '99':
+            os.chdir(home)
+            sys.exit(colored('\nTerminating KOMODO (╯°□°）╯︵ ┻━┻','red', attrs=['bold']))
+        # call invalid selection   
+        else:
+            os.chdir(home)
+            invalidSelection(selection) 
+            
         landing(selection,url,fileName,outputFile,initialTags)
-        initialTags = []
+
+        cmd = 'cd html ; open '+str(fileName)
+        os.system(cmd)
 
 def validateURL(validURL, urlTemp):
     global url
@@ -917,48 +926,46 @@ def validateURL(validURL, urlTemp):
     current_time = "Scan Results: "+ str(x.strftime("%x %I:%M%p"))
     current_time_adjusted = current_time.replace('/','-')
 
-    #User input for URL Prefix and Target
+    # User input for URL Prefix and Target
     while validURL == False:
-        selected = input('\nEnter "1" for '+colored('HTTPS','yellow')+' or "2" for '+colored('HTTP','yellow')+': ')
+        selected = input('\nEnter "1" for '+colored('HTTPS','yellow')+' target or "2" for '+colored('HTTP','yellow')+' target: ')
         if selected == '1':
             target = input('('+colored('HTTPS','yellow')+' Selected) Enter the target URL or IP Address: ')
 
-            #regular expression to replace all link issues i.e. / & . for html files
+            # regular expression to replace all link issues i.e. / & . for html files
             rep = {"/": "-", ".com": "", ".": "-"} #define desired replacements here
 
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
-            #output = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target)) + current_time_adjusted+'.html'
             fileName = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target))+'.html'
 
             url = 'https://'+str(target)
             validURL = True
 
             print(colored('\nCurrent Target: '+url,attrs=['bold']))
+            # create HTML file 
             outputFile = createHTML(url,fileName)
             initial(validURL,url,fileName,outputFile)
 
         elif selected == '2':
             target = input('('+colored('HTTP','yellow')+' Selected) Enter the target URL or IP Address: ')
 
-            #regular expression to replace all link issues i.e. / & . for html files
+            # regular expression to replace all link issues i.e. / & . for html files
             rep = {"/": "-", ".com": "", ".": "-"} #define desired replacements here
 
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
-            #output = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target)) + current_time_adjusted+'.html'
             fileName = (pattern.sub(lambda m: rep[re.escape(m.group(0))], target))+'.html'
 
             url = 'http://'+str(target)
             validURL = True
 
             print(colored('\nCurrent Target: '+url,attrs=['bold']))
-
+            # create HTML file 
             outputFile = createHTML(url,fileName)
             initial(validURL,url,fileName,outputFile)
         else:
             invalidSelection(selected)
-
 
 def changeTarget(validURL,url):
     os.system('clear')
@@ -982,7 +989,7 @@ def main():
 
     global url
 
-    os.system("echo 'NEW FEATURES ALERT!\nIntroducing... \n- Full BurpSuite REST API support!\n- Reworked Tool Selection!\n- Friendlier (and fancier) UI!' | lolcat")
+    os.system("echo 'NEW FEATURES ALERT! (Nov 2022)\nIntroducing... \n- Full BurpSuite REST API support!\n- BETA Interactive Reporting Now Available!\n- Friendlier (and fancier) UI!' | lolcat")
 
     url = ""
     output = ""
@@ -990,7 +997,7 @@ def main():
 
     #Initial Screen
     validateURL(validURL,url)
-    
+
 if __name__ == '__main__':
     burp = BURPSUITE()
     main()

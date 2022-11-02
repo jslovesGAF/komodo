@@ -1,9 +1,8 @@
 # KOMODO All-in-one Hacking Tool
-# Joshua Sloves / Ethan Tomford
+# Primary Author: Joshua Sloves
 
 ####### SAMPLE TARGET google-gruyere.appspot.com/593948396113602183495718301495133174940
 ####### SAMPLE TARGET scanme.nmap.org
-#######
 
 import os, warnings, sys, re, datetime, socket, subprocess, urllib.request, json, requests, time, subprocess
 from termcolor import colored, cprint
@@ -218,7 +217,7 @@ class BURPSUITE():
 
                 elif selected == '99':
                     os.system('clear')
-                    initial(validURL,url,output)
+                    initial(validURL,url,fileName,outputFile)
 
                 elif selected == '0':
                     changeTarget(validURL,url)
@@ -253,7 +252,7 @@ class BURPSUITE():
 
                 elif selected == '99':
                     os.system('clear')
-                    initial(validURL,url,output)
+                    initial(validURL,url,fileName,outputFile)
 
                 elif selected == '0':
                     changeTarget(validURL,url)
@@ -499,7 +498,7 @@ class INFORMATION_GATHERING:
             elif 'http://' in orig:
                 new = orig.replace('http://',"",1)
 
-            cmd = str('nmap -v -A -T5 {url} --stats-every 30m | txt2html --extract'.format(url=new))
+            cmd = str('nmap -v -A -T5 {url} --stats-every 30m | tee /dev/stderr | txt2html --extract'.format(url=new))
             cmdOutput = pipeHelper(cmd)
             
             ### OUTPUT MODIFICATION HERE
@@ -687,9 +686,6 @@ def createHTML(url,fileName):
     outputFile = fileName
 
     if os.path.isfile(fileName):
-        with open(fileName, 'r') as f:
-            #outputFile = f.read()
-            print('File exists.')
         os.chdir(home)
         return outputFile
     else:
@@ -1067,7 +1063,7 @@ def main():
 
     global url
 
-    os.system("echo 'NEW FEATURES ALERT!\nIntroducing... \n- Full BurpSuite REST API support!\n- Reworked Tool Selection!\n- Friendlier (and fancier) UI!' | lolcat")
+    os.system("echo 'NEW FEATURES ALERT! (Nov 2022)\nIntroducing... \n- Full BurpSuite REST API support!\n- BETA Interactive Reporting Now Available!\n- Friendlier (and fancier) UI!' | lolcat")
 
     url = ""
     output = ""
