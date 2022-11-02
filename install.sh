@@ -2,7 +2,7 @@
 
 echo "------ Running all neccesssary installations for KOMODO ------"
 
-sudo apt-get update
+sudo apt-get update && apt-get upgrade -y && apt-get autoclean
 sudo apt-get install idle3
 sudo apt-get install python-is-python3
 
@@ -19,6 +19,8 @@ sudo pip install lolcat
 #testssl 
 cd misc
 git clone --depth 1 https://github.com/drwetter/testssl.sh.git
+#CheckURL
+git clone https://github.com/UndeadSec/checkURL.git
 cd ..
 
 #Dotdotpwn 
@@ -27,11 +29,6 @@ sudo apt install dotdotpwn
 #Nuclei
 sudo apt install nuclei
 nuclei
-
-#CheckURL
-cd misc
-git clone https://github.com/UndeadSec/checkURL.git
-cd ..
 
 #Gobuster
 sudo apt install gobuster

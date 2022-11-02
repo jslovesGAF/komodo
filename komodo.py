@@ -550,7 +550,7 @@ class INFORMATION_GATHERING:
         
         try:
             print("Launching TestSSL Scan\n")
-            os.chdir(home+'/testssl.sh')
+            os.chdir(home+'/misc/testssl.sh')
 
             cmd = str('./testssl.sh -s -p -h --quiet --color 0 --vulnerabilities {url} | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
@@ -629,7 +629,7 @@ class INFORMATION_GATHERING:
 
         try:
             print("Launching CheckURL Scan\n")
-            os.chdir(home+'/checkURL')
+            os.chdir(home+'/misc/checkURL')
 
             cmd = str('python checkURL.py --url {url} | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
