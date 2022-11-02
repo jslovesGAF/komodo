@@ -9,7 +9,7 @@ such as information gathering, vulnerability scanning, and technology lookups.
 
 Written in Python, runs in the command line. 
 
-![KOMODO](https://i.imgur.com/uJAB5mn.png)
+![KOMODO](https://imgur.com/a/XO3RKwa)
 
 
 ### Tools Currently Supported: ###
@@ -17,6 +17,7 @@ Written in Python, runs in the command line.
 #### APIs ####
 1. Qualys API (For AppSec Use)
 2. BurpSuite Rest API
+3. Wappalyzer (https://www.wappalyzer.com/)
 
 #### Information Gathering ####
 1. Nmap (https://nmap.org/)
@@ -33,10 +34,6 @@ Written in Python, runs in the command line.
 3. DotDotPwn (https://github.com/wireghoul/dotdotpwn)
 4. SQLMap (https://sqlmap.org/)
 5. Nuclei (https://nuclei.projectdiscovery.io/)
-
-#### Technology Lookup ####
-1. Wappalyzer (https://www.wappalyzer.com/)
-2. CMSeek (https://github.com/Tuhinshubhra/CMSeeK)
 
 #### Exploits ####
 1. Metasploit - WMAP (https://www.offensive-security.com/metasploit-unleashed/wmap-web-scanner/)
