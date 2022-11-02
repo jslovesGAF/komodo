@@ -11,6 +11,8 @@ Written in Python, runs in the command line.
 
 ![KOMODO](https://i.imgur.com/pFLwrUe.png)
 
+With interactive HTML Reports!
+![KOMODO2](https://i.imgur.com/EJCWgKO.png)
 
 ### Tools Currently Supported: ###
 
