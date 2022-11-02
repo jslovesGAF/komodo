@@ -14,16 +14,25 @@ Written in Python, runs in the command line.
 
 ### Tools Currently Supported: ###
 
+#### APIs ####
+1. Qualys API (For AppSec Use)
+2. BurpSuite Rest API
+
 #### Information Gathering ####
 1. Nmap (https://nmap.org/)
-2. Testssl.sh (https://testssl.sh/)
-3. CheckURL (https://github.com/UndeadSec/checkURL)
-4. Dirbuster (https://www.kali.org/tools/dirbuster/)
+2. Traceroute (https://linux.die.net/man/8/traceroute)
+3. Testssl.sh (https://testssl.sh/)
+4. WhatWeb (https://github.com/urbanadventurer/WhatWeb)
+5. WhoIS (https://www.kali.org/tools/whois/)
+6. CheckURL (https://github.com/UndeadSec/checkURL)
+7. Gobuster (https://github.com/OJ/gobuster)
 
 #### Vulnerability Scanning ####
 1. Nikto (https://github.com/sullo/nikto)
 2. WPScan (https://github.com/wpscanteam/wpscan)
 3. DotDotPwn (https://github.com/wireghoul/dotdotpwn)
+4. SQLMap (https://sqlmap.org/)
+5. Nuclei (https://nuclei.projectdiscovery.io/)
 
 #### Technology Lookup ####
 1. Wappalyzer (https://www.wappalyzer.com/)
@@ -37,11 +46,12 @@ Written in Python, runs in the command line.
 - Python (3.10.5) (https://www.python.org/downloads/)
 - Kali Linux (needs root privileges)
 
+**Automatically Performed by Installer**
 sudo apt update && sudo apt upgrade
+sudo apt-get install python-is-python3
+...more
 
-sudo apt-get -y install python3
-
-Run install.sh to install necessary dependencies.
+Run install.sh to finish installing necessary dependencies.
 
 ### CONTACT ###
 
@@ -50,7 +60,7 @@ Official Email:   joshua.sloves@gaf.com
 ### AUTHORS ###
 
 ```
- Joshua Sloves - Application Security Analyst        
- Ethan Tomford - 2022 Cybersecurity Intern
+ Joshua Sloves - Application Security Analyst,
+ with a special thank you to Ethan Tomford, 2022 Cybersecurity Intern
 ```
 
