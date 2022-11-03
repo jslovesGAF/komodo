@@ -217,7 +217,7 @@ class BURPSUITE():
 
                 elif selected == '99':
                     os.system('clear')
-                    initial(validURL,url,output)
+                    initial(validURL,url,fileName,outputFile)
 
                 elif selected == '0':
                     changeTarget(validURL,url)
@@ -252,7 +252,7 @@ class BURPSUITE():
 
                 elif selected == '99':
                     os.system('clear')
-                    initial(validURL,url,output)
+                    initial(validURL,url,fileName,outputFile)
 
                 elif selected == '0':
                     changeTarget(validURL,url)
@@ -263,6 +263,62 @@ class BURPSUITE():
                     continue
         else:
             burp.burpSelections()
+
+class QUALYS:
+    def qualysLanding(self):
+        print(colored('\n1. "Run Monday"','white',attrs=['bold']))
+        print(colored('2. "Run Friday"','white',attrs=['bold']))
+        print(colored('3. Create New Sets','green', attrs=['bold']))
+        print(colored('99. Go Back','red', attrs=['bold']))
+
+        selected = input('Choose an option to proceed: ')
+        try:
+            #Run Monday Script
+            if selected == "1":
+                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+                os.system('sh run_monday')
+
+            #Run Friday Script
+            elif selected == "2":
+                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/')
+                os.system('sh run_friday')
+
+            #Create New Sets & Delete Old
+            elif selected == "3":
+                if len(os.listdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')) == 0:
+                    print("Directory is empty")
+                else:
+                    os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/*')
+
+                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+
+                os.system('sh create_set1')
+                os.system('sh create_set2')
+
+                os.system('cp -a /home/kali/Desktop/Qualys\ Scripts/Test/. /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/')
+                os.chdir('/home/kali/Desktop/Qualys Scripts/For_Elizabeth/BMI_XMLs/')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set1')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/create_set2')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file1.txt')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/file2.txt')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/README.txt')
+                os.system('rm /home/kali/Desktop/Qualys\ Scripts/For_Elizabeth/BMI_XMLs/update_test.xml')
+
+                os.chdir('/home/kali/Desktop/Qualys Scripts/Test/')
+                for file in os.listdir('/home/kali/Desktop/Qualys Scripts/Test/'):
+                    if file.startswith("update1_") or file.startswith("update2_"):
+                        command = 'rm '+str(file)
+                        os.system(command)
+
+            elif selected == '99':
+                os.system('clear')
+
+            else:
+                invalidSelection(selected)
+                obj = QUALYS
+                obj.qualysLanding(self)
+        except:
+               print(colored('Error. Is the directory on your desktop?\n','red',attrs=['bold']))
 
 def wappalyzer():
     global output
@@ -917,7 +973,7 @@ def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
 
         cmd = 'cd html ; open '+str(fileName)
         os.system(cmd)
-
+ 
 def validateURL(validURL, urlTemp):
     global url
     url = urlTemp
@@ -928,7 +984,7 @@ def validateURL(validURL, urlTemp):
 
     # User input for URL Prefix and Target
     while validURL == False:
-        selected = input('\nEnter "1" for '+colored('HTTPS','yellow')+' target or "2" for '+colored('HTTP','yellow')+' target: ')
+        selected = input('Enter "1" for '+colored('HTTPS','yellow')+' or "2" for '+colored('HTTP','yellow')+': ')
         if selected == '1':
             target = input('('+colored('HTTPS','yellow')+' Selected) Enter the target URL or IP Address: ')
 
@@ -966,6 +1022,24 @@ def validateURL(validURL, urlTemp):
             initial(validURL,url,fileName,outputFile)
         else:
             invalidSelection(selected)
+            
+# Qualys or Pen Testing
+def validateIntent(validURL,url): 
+    validIntent = False
+    while validIntent == False:
+        selected = input('\nEnter "1" for '+colored('Qualys Script Management','yellow')+' or "2" for '+colored('Penetration Testing','red')+': ')
+        if selected == '1':
+            os.system('clear')
+            validIntent = True
+            obj = QUALYS()
+            obj.qualysLanding()
+            validateIntent(validURL,url)
+        elif selected == '2':
+            validIntent = True
+            os.system('clear')
+            validateURL(validURL,url)
+        else:
+            invalidSelection(selected)
 
 def changeTarget(validURL,url):
     os.system('clear')
@@ -996,7 +1070,7 @@ def main():
     validURL = False
 
     #Initial Screen
-    validateURL(validURL,url)
+    validateIntent(validURL,url)
 
 if __name__ == '__main__':
     burp = BURPSUITE()
