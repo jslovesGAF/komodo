@@ -2,7 +2,8 @@
 
 echo "------ Running all neccesssary installations for KOMODO ------"
 
-sudo apt-get update && apt-get upgrade -y && apt-get autoclean
+#sudo apt-get update && apt-get upgrade -y && apt-get autoclean
+sudo apt-get update -y && apt-get autoclean
 sudo apt-get install idle3
 sudo apt-get install python-is-python3
 
