@@ -1,5 +1,5 @@
 # KOMODO All-in-one Hacking Tool
-# Primary Author: Joshua Sloves
+# Author: Joshua Sloves
 
 ####### SAMPLE TARGET google-gruyere.appspot.com/593948396113602183495718301495133174940
 ####### SAMPLE TARGET scanme.nmap.org
@@ -100,7 +100,7 @@ class BURPSUITE():
         else:
             scopeURL = targetURL
             cmdScope = str(',"scope":{"include":[{"rule":"'+'{url}'.format(url=targetURL)+'"}],'+'"type":"SimpleScope"},"urls":["'+'{url}'.format(url=targetURL)+'"]}\'')
-        cmdConfig = str('\''+'{"scan_configurations":[{"name":"Crawl and Audit - Fast","type":"NamedConfiguration"''}]')
+        cmdConfig = str('\''+'{"scan_configurations":[{"name":'+configType+',"type":"NamedConfiguration"''}]')
 
         cmd = str(cmdURL+cmdConfig+cmdScope)
         announcement = 'echo '+'\''+configType+' scan on '+targetURL+' with a scope of '+scopeURL+'\' | lolcat'
@@ -228,6 +228,7 @@ class BURPSUITE():
 
     def burpLanding(self):
         global key
+        global fileName
         validURL = True
         burp = BURPSUITE()
         if key == "":
@@ -574,7 +575,7 @@ class INFORMATION_GATHERING:
         try:
             print("Launching WhatWeb Scan\n")
             
-            cmd = str('whatweb {url} --log-json=FILE --color=never | txt2html --extract'.format(url=url))
+            cmd = str('whatweb {url} --color=never | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
             
             ### OUTPUT MODIFICATION HERE
@@ -632,19 +633,17 @@ class INFORMATION_GATHERING:
 
             cmd = str('python checkURL.py --url {url} | txt2html --extract'.format(url=url))
             cmdOutput = pipeHelper(cmd)
-            ### OUTPUT MODIFICATION HERE
+            if 'Evil URL NOT detected' in str(cmdOutput):
+                cmdOutput = 'Evil URL NOT detected'
+                os.chdir(home)
+                return cmdOutput
+            else:
+                cmdOutput = 'Evil URL detected'
+                os.chdir(home)
+                return cmdOutput
         except:
             os.chdir(home)
             print(colored('Whoops! Something went wrong. Please try again.', 'red',))
-
-        if 'Evil URL NOT detected' in str(cmdOutput):
-            cmdOutput = 'Evil URL NOT detected'
-            os.chdir(home)
-            return cmdOutput
-        else:
-            cmdOutput = 'Evil URL detected'
-            os.chdir(home)
-            return cmdOutput
 
     # Brute force directories and file names on web application servers
     def gobuster(self):
@@ -694,7 +693,6 @@ def createHTML(url,fileName):
                 for src, dest in replacements.items():
                     line = line.replace(src, dest)
                 outfile.write(line)
-        print('File does not exist.')
         os.chdir(home)
         return outputFile
 
@@ -722,15 +720,6 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
         soup = BeautifulSoup(contents, 'html.parser')
         divName = 'tool0'
         headerTag = soup.find('h1')
-
-        # call Burp class
-        if selected.lower() == 'b':
-            burp.burpLanding()
-            
-        # call Wappalyer class
-        elif selected.lower() == 'w':
-            header("wappalyzer")
-            wappalyzer()
             
         # Information Gathering
         if selected == '1':
@@ -905,7 +894,7 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
                 
         # Invalid selection
         else:
-            invalidSelection(selection) 
+            invalidSelection(selected) 
 
 def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
     x = datetime.datetime.now()
@@ -913,6 +902,7 @@ def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
     while validURL == True:
         global url
         global outputFile
+        global fileName
         
         outputFile = outputFileTemp
         fileName = fileNameTemp
@@ -925,7 +915,7 @@ def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
         text = colored('\n- - - - - APIs - - - - -','red', attrs=['bold'])
         cprint(text, "yellow", "on_white")
         print(colored('b. BurpSuite','white'))
-        print(colored('w. Wappalyzer','white'))
+        print(colored('w. Wappalyzer (Under Construction)','white'))
 
         # other tool selection
         text = colored('\n- - - - - RECON | LIGHTWEIGHT VULN. SCANS | EXPLOITS - - - - -','red', attrs=['bold'])
@@ -953,7 +943,7 @@ def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
                           '<div name="target" class="content">','<p>Please see scan results below.</p>']
         # parent button for Exploit
         elif selection == '3':
-            current_time = "Exploit Tools - SScan Results from "+ str(x.strftime("%x %I:%M%p"))
+            current_time = "Exploit Tools - Scan Results from "+ str(x.strftime("%x %I:%M%p"))
             initialTags =['<button name="target" type="button" class="collapsible">'+current_time+'</button>','\n',
                           '<div name="target" class="content">','<p>Please see scan results below.</p>']
         # change Target      
@@ -964,6 +954,16 @@ def initial(validURL,urlTemp,fileNameTemp,outputFileTemp):
         elif selection == '99':
             os.chdir(home)
             sys.exit(colored('\nTerminating KOMODO (╯°□°）╯︵ ┻━┻','red', attrs=['bold']))
+
+        # call Burp class
+        elif selection.lower() == 'b':
+            burp.burpLanding()
+            
+        # call Wappalyer class
+        elif selection.lower() == 'w':
+            header("wappalyzer")
+            wappalyzer()
+            
         # call invalid selection   
         else:
             os.chdir(home)
