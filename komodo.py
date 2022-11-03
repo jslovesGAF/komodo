@@ -827,7 +827,7 @@ def landing(selected,urlTemp,fileNameTemp,outputFileTemp,initialTagsTemp):
             print(colored("\n-- syntax: 1245 --", "yellow"))
             selected = input('Choose an option to proceed: ')
             
-            obj = EXPLOITS(
+            obj = EXPLOITS()
             
             # "Go back" - return to initial
             if selected == '99':
